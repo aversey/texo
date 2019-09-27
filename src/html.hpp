@@ -8,6 +8,9 @@ class TexoHTMLProducer: public TexoProducer {
 public:
     TexoHTMLProducer(TexoExporter &exporter);
     void Put(const Texo &piece);
+private:
+    void BeginLink(const Texo &piece);
+    void Image(const Texo &piece);
 };
 
 

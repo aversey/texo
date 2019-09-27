@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <html.hpp>
 #include <plain.hpp>
 #include <file.hpp>

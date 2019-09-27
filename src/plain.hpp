@@ -4,13 +4,6 @@
 #include "texo.hpp"
 
 
-class TexoPlainProducer: public TexoProducer {
-public:
-    TexoPlainProducer(TexoExporter &exporter);
-    void Put(const Texo &piece);
-};
-
-
 class TexoPlainImporter: public TexoImporter {
 public:
     TexoPlainImporter(TexoProducer &producer);

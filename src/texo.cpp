@@ -1,9 +1,13 @@
 #include "texo.hpp"
 
 
-Texo::Texo(Type type): type(type), c(0)  {}
+Texo::Texo(Type type):
+    type(type), c(0), image_src(0), image_alt(0), link_url(0)
+{}
 
-Texo::Texo(const char c): type(character), c(c)  {}
+Texo::Texo(const char c):
+    type(character), c(c), image_src(0), image_alt(0), link_url(0)
+{}
 
 
 void TexoExporter::PutStr(const char *str)
