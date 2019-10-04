@@ -2,7 +2,7 @@
 # DEBUG    = yes
 
 CC       = g++
-EXAMPLES = plain_to_html
+EXAMPLES = plain_to_html filter_html
 
 CFLAGS   = -Wall
 ifeq '$(DEBUG)' 'yes'

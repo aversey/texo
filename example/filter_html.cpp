@@ -8,11 +8,10 @@ int main()
     TexoHTMLProducer producer(exporter);
     TexoHTMLImporter importer(producer);
     importer.PutStr(
-        "<script>EVIL MAGIC</script>\n"
+        "<script>EVIL MAGIC</script></p>\n"
         "<a href='#'>Some</a> br:<br/>\n"
         "<p class='evil_too'>And paragraphs work well too...</p>\n"
-        "<b>You</b> <i>can</i> <del>use</del> <ins>some</ins> witchcraft.\n"
+        "<b>You</b> <i>can</i> <del>use</del> <ins>some</ins> <p>witchcraft.\n"
     );
-    return 0;
     return 0;
 }

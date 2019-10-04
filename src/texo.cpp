@@ -23,6 +23,16 @@ void TexoExporter::PutStr(const char *str)
 
 TexoProducer::TexoProducer(TexoExporter &exporter): exporter(exporter)  {}
 
+void TexoProducer::PutStr(const char *str)
+{
+    if (str) {
+        while (*str) {
+            Put(Texo(*str));
+            ++str;
+        }
+    }
+}
+
 
 TexoImporter::TexoImporter(TexoProducer &producer): producer(producer)  {}
 

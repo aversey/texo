@@ -43,6 +43,8 @@ class TexoProducer {
 public:
     TexoProducer(TexoExporter &exporter);
     virtual void Put(const Texo &piece) = 0;
+    virtual void PutStr(const char *str);
+
 protected:
     TexoExporter &exporter;
 };
@@ -54,6 +56,7 @@ public:
     virtual void Put(const char c) = 0;
     virtual void PutStr(const char *str);
     virtual void PutFile(FILE *file);
+
 protected:
     TexoProducer &producer;
 };

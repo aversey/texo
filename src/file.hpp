@@ -8,6 +8,7 @@ class TexoFileExporter: public TexoExporter {
 public:
     TexoFileExporter(FILE *file);
     void Put(const char c);
+
 private:
     FILE *file;
 };
