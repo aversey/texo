@@ -1,19 +1,19 @@
 # Debug mode:
 # DEBUG   = yes
 
-CC      = g++
-LIB     = libtexo.a
+CC        = g++
+LIB       = libtexo.a
 
-CFLAGS  = -Wall
+CPPFLAGS  = -Wall -ansi
 ifeq '$(DEBUG)' 'yes'
-CFLAGS += -g -O0
+CPPFLAGS += -g -O0
 else
-CFLAGS += -O3
+CPPFLAGS += -O3
 endif
 
-SRC_DIR = src
-SRC     = $(wildcard $(SRC_DIR)/*.cpp)
-OBJ     = $(SRC:.cpp=.o)
+SRC_DIR   = src
+SRC       = $(wildcard $(SRC_DIR)/*.cpp)
+OBJ       = $(SRC:.cpp=.o)
 
 
 default: $(LIB)
@@ -25,8 +25,8 @@ endif
 deps.mk: $(SRC)
 	$(CC) -MM $^ > $@
 
-%.o: %.cpp %.h
-	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.cpp %.hpp
+	$(CC) $(CPPFLAGS) -c $< -o $@
 
 $(LIB): $(OBJ)
 	ar rcs $@ $^
