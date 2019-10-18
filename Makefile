@@ -1,5 +1,5 @@
 # Debug mode:
-# DEBUG   = yes
+DEBUG   = yes
 
 CC        = g++
 LIB       = libtexo.a

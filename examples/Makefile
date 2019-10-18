@@ -1,5 +1,5 @@
 # Uncomment following to enable debug mode:
-# DEBUG    = yes
+DEBUG    = yes
 
 CC        = g++
 EXAMPLES  = plain_to_html
