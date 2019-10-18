@@ -11,10 +11,12 @@ else
 CPPFLAGS += -O3
 endif
 
-INCLUDE   = -I../src
-LFLAGS    = -L.. -ltexo
+INCLUDE   = -I../src -I$(SCRIPTDIR)
+LFLAGS    = -L.. -ltexo -L$(SCRIPTDIR) -lscriptpp
 
 TEXO      = ../libtexo.a
+SCRIPTDIR = ../../lib/scriptpp
+SCRIPTPP  = $(SCRIPTDIR)/libscriptpp.a
 
 
 default: $(EXAMPLES)
@@ -22,7 +24,10 @@ default: $(EXAMPLES)
 $(TEXO):
 	cd ..; $(MAKE)
 
-%: %.cpp $(TEXO)
+$(SCRIPTPP):
+	cd $(SCRIPTDIR); $(MAKE)
+
+%: %.cpp $(SCRIPTPP) $(TEXO)
 	$(CC) $(CPPFLAGS) $(INCLUDE) $< $(LFLAGS) -o $@
 
 clean:

@@ -15,6 +15,8 @@ SRC_DIR   = src
 SRC       = $(wildcard $(SRC_DIR)/*.cpp)
 OBJ       = $(SRC:.cpp=.o)
 
+INCLUDE   = -I../lib/scriptpp
+
 
 default: $(LIB)
 
@@ -26,7 +28,7 @@ deps.mk: $(SRC)
 	$(CC) -MM $^ > $@
 
 %.o: %.cpp %.hpp
-	$(CC) $(CPPFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(INCLUDE) -c $< -o $@
 
 $(LIB): $(OBJ)
 	ar rcs $@ $^

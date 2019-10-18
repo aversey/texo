@@ -1,13 +1,16 @@
 #ifndef TEXO_INCLUDED_FILE
 #define TEXO_INCLUDED_FILE
 
-#include "texo.hpp"
+#include "exporter.hpp"
+#include <stdio.h>
 
 
-class TexoFileExporter: public TexoExporter {
+class TexoExporterFile: public TexoExporter {
 public:
-    TexoFileExporter(FILE *file);
-    void Put(const char c);
+    TexoExporterFile(FILE *file);
+
+    void Put(char c);
+    void Put(const ScriptVariable &str);
 
 private:
     FILE *file;

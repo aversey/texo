@@ -1,9 +1,15 @@
 #include "file.hpp"
 
 
-TexoFileExporter::TexoFileExporter(FILE *file): file(file)  {}
+TexoExporterFile::TexoExporterFile(FILE *file): file(file)
+{}
 
-void TexoFileExporter::Put(const char c)
+void TexoExporterFile::Put(char c)
 {
     fputc(c, file);
+}
+
+void TexoExporterFile::Put(const ScriptVariable &str)
+{
+    fwrite(str.c_str(), 1, str.Length(), file);
 }

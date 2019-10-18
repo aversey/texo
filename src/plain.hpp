@@ -1,18 +1,21 @@
 #ifndef TEXO_INCLUDED_PLAIN
 #define TEXO_INCLUDED_PLAIN
 
+#include "exporter.hpp"
+#include "producer.hpp"
+#include "importer.hpp"
 #include "texo.hpp"
 
 
-class TexoPlainImporter: public TexoImporter {
+class TexoProducerPlain: public TexoProducer {
 public:
-    TexoPlainImporter(TexoProducer &producer);
-    void Put(const char c);
+    TexoProducerPlain(TexoExporter &exporter);
+};
 
-private:
-    int  space;
-    int  newline;
-    bool first;
+
+class TexoImporterPlain: public TexoImporter {
+public:
+    TexoImporterPlain(TexoProducer &producer);
 };
 
 
