@@ -1,0 +1,2 @@
+Simpliest format.  Paragraphs on newlines.  And nothing else.
+So this is second paragraph.

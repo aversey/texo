@@ -1,0 +1,17 @@
+I am a little cute line.
+
+I am another and that's fine.
+
+But I am as long as a pine,
+so lets drink a glass of wine.
+
+
+
+You can use any count of empty lines to mark paragraphs.
+
+> This is quote.
+> Long enough.
+
+--------------------------------------------------------
+
+This was horizontal rule

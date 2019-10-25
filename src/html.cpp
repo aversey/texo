@@ -172,3 +172,13 @@ void TexoImporterHTML::Put(char c)
 {  // TODO
     producer.Put(Texo(c));
 }
+
+void TexoImporterHTML::Put(const ScriptVariable &str)
+{
+    TexoImporter::Put(str);
+}
+
+void TexoImporterHTML::Put(FILE *file)
+{
+    TexoImporter::Put(file);
+}

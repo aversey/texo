@@ -12,7 +12,6 @@ public:
 
     void Put(const Texo &piece);
 
-    void Put(const TexoHeader &piece);
     void Put(const TexoParagraph &piece);
     void Put(const TexoQuote &piece);
 
@@ -21,6 +20,7 @@ public:
 
 private:
     bool quoted;
+    bool newline;
 };
 
 
@@ -31,25 +31,26 @@ public:
 
     void Put(char c);
     void Put(const ScriptVariable &str);
+    void Put(FILE *file);
 
 private:
     enum State {
         text,
-        space,
         newline,
         paragraph,
         quote,
         quote_newline,
-        header
+        rule
     } state;
 
     void Text(char c);
-    void Space(char c);
     void Newline(char c);
     void Paragraph(char c);
     void Quote(char c);
     void QuoteNewline(char c);
-    void Header(char c);
+    void Rule(char c);
+
+    int dash_count;
 };
 
 

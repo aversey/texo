@@ -1,5 +1,6 @@
 #ifndef TEXO_INCLUDED_TEXO
 #define TEXO_INCLUDED_TEXO
+// TODO: lists & maybe tables
 
 #include <scrvar.hpp>
 

@@ -4,6 +4,11 @@
 TexoProducer::TexoProducer(TexoExporter &exporter): exporter(exporter)
 {}
 
+void TexoProducer::Put(char c)
+{
+    Put(Texo(c));
+}
+
 void TexoProducer::Put(const Texo &piece)
 {
     exporter.Put(piece.c);

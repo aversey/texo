@@ -9,6 +9,7 @@ class TexoProducer {
 public:
     TexoProducer(TexoExporter &exporter);
 
+    virtual void Put(char c);
     virtual void Put(const Texo &piece);
 
     virtual void Put(const TexoHeader &piece);
