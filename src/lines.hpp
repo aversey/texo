@@ -18,7 +18,6 @@ public:
     void Put(const TexoLineBreak &piece);
 
 private:
-    bool quoted;
     bool newline;
 };
 

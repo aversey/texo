@@ -43,6 +43,59 @@ public:
     void Put(char c);
     void Put(const ScriptVariable &str);
     void Put(FILE *file);
+
+private:
+    enum State {
+        text,
+        header_text,
+        quote_text,
+        quote_newline,
+        code_text,
+        code_newline,
+        code_end,
+        backslash,
+        asterisk,
+        underline,
+        plus,
+        tilde,
+        newline,
+        rule,
+        paragraph,
+        header,
+        code,
+        quote
+    } state;
+    State wrapping_state;
+    bool is_italic;
+    bool is_bold;
+    bool is_underline;
+    bool is_strike;
+    bool is_mono;
+    int header_level;
+    int rule_dash_count;
+    int code_quote_count;
+
+    void Text(char c);
+    void HeaderText(char c);
+    void QuoteText(char c);
+    void QuoteNewline(char c);
+    void CodeText(char c);
+    void CodeNewline(char c);
+    void CodeEnd(char c);
+    void Backslash(char c);
+    void Asterisk(char c);
+    void Underline(char c);
+    void Plus(char c);
+    void Tilde(char c);
+    void Newline(char c);
+    void Rule(char c);
+    void Paragraph(char c);
+    void Header(char c);
+    void Code(char c);
+    void Quote(char c);
+
+    void Backquote();
+    void EndHeader();
 };
 
 

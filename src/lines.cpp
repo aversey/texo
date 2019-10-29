@@ -2,15 +2,18 @@
 
 
 TexoProducerLines::TexoProducerLines(TexoExporter &exporter):
-    TexoProducer(exporter)
+    TexoProducer(exporter), newline(false)
 {}
 
 void TexoProducerLines::Put(const Texo &piece)
 {
     if (piece.c == '\n') {
-        exporter.Put(' ');
+        if (!newline) {
+            exporter.Put(' ');
+        }
     } else {
         exporter.Put(piece.c);
+        newline = false;
     }
 }
 
@@ -18,6 +21,7 @@ void TexoProducerLines::Put(const TexoParagraph &piece)
 {
     if (piece.closing) {
         exporter.Put('\n');
+        newline = true;
     }
 }
 
@@ -25,6 +29,7 @@ void TexoProducerLines::Put(const TexoQuote &piece)
 {
     if (piece.closing) {
         exporter.Put('\n');
+        newline = true;
     } else {
         exporter.Put('>');
     }
@@ -33,6 +38,7 @@ void TexoProducerLines::Put(const TexoQuote &piece)
 void TexoProducerLines::Put(const TexoLineBreak &piece)
 {
     exporter.Put('\n');
+    newline = true;
 }
 
 

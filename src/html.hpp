@@ -37,27 +37,6 @@ public:
     void Put(char c);
     void Put(const ScriptVariable &str);
     void Put(FILE *file);
-
-private:
-    enum State {
-        text, // TODO: decoding ("&gt;" -> ">")
-        open,
-        tag_name,
-        tag_skip,
-        attr_pre,
-        attr_name,
-        attr_name_post,
-        attr_value_pre,
-        attr_value
-    } state;
-    bool           closing;
-    ScriptVariable tag;
-    ScriptVariable attr;
-    ScriptVariable attr_src;
-    ScriptVariable attr_href;
-    ScriptVariable attr_title;
-    ScriptVariable attr_alt;
-    ScriptVariable link_text;
 };
 
 
