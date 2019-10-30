@@ -39,6 +39,7 @@ private:
 class TexoImporterMarkdown: public TexoImporter {
 public:
     TexoImporterMarkdown(TexoProducer &producer);
+    ~TexoImporterMarkdown();
 
     void Put(char c);
     void Put(const ScriptVariable &str);
@@ -46,6 +47,8 @@ public:
 
 private:
     enum State {
+        error,
+        start,
         text,
         header_text,
         quote_text,
@@ -62,19 +65,23 @@ private:
         rule,
         paragraph,
         header,
-        code,
-        quote
+        code
     } state;
     State wrapping_state;
-    bool is_italic;
-    bool is_bold;
-    bool is_underline;
-    bool is_strike;
-    bool is_mono;
+    enum Modificator {
+        italic,
+        bold,
+        mono,
+        underlined,
+        strike
+    } mods[5];
+    int mod_pos;
+    int header_level_last;
     int header_level;
     int rule_dash_count;
     int code_quote_count;
 
+    void Start(char c);
     void Text(char c);
     void HeaderText(char c);
     void QuoteText(char c);
@@ -92,10 +99,14 @@ private:
     void Paragraph(char c);
     void Header(char c);
     void Code(char c);
-    void Quote(char c);
 
     void Backquote();
-    void EndHeader();
+
+    bool CheckMods(Modificator mod);
+    bool Mod(Modificator mod);
+
+    void BlockState(State st);
+    void EndBlock();
 };
 
 

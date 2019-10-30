@@ -2,7 +2,7 @@
 DEBUG    = yes
 
 CC        = g++
-EXAMPLES  = plain lines
+EXAMPLES  = plain lines markdown
 
 CPPFLAGS  = -Wall -ansi
 ifeq '$(DEBUG)' 'yes'
