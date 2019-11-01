@@ -10,6 +10,7 @@ void TexoProducerHTML::Put(const Texo &piece)
     switch (piece.c) {
     case '<': exporter.Put("&lt;");  break;
     case '>': exporter.Put("&gt;");  break;
+    case '&': exporter.Put("&amp;"); break;
     default:  exporter.Put(piece.c); break;
     }
 }
