@@ -1,6 +1,5 @@
 #ifndef TEXO_INCLUDED_TEXO
 #define TEXO_INCLUDED_TEXO
-// TODO: lists & maybe tables
 
 #include <scrvar.hpp>
 
@@ -10,57 +9,35 @@ struct Texo {
     char c;
 };
 
+
 /*
  * Texo Blocks
  */
 struct TexoHeader {
-    TexoHeader(int level, bool closing = false);
-    int  level; // Number >= 1, bigger for bigger.
-    bool closing;
+    TexoHeader(int level);
+    int level;  // Number >= 1, bigger for bigger.
 };
 
-struct TexoParagraph {
-    TexoParagraph(bool closing = false);
-    bool closing;
-};
+struct TexoParagraph {};
 
-struct TexoCode {
-    TexoCode(bool closing = false);
-    bool closing;
-};
+struct TexoCode {};
 
-struct TexoQuote {
-    TexoQuote(bool closing = false);
-    bool closing;
-};
+struct TexoQuote {};
+
 
 /*
  * Texo Decorators
  */
-struct TexoMono {
-    TexoMono(bool closing = false);
-    bool closing;
-};
+struct TexoMono {};
 
-struct TexoBold {
-    TexoBold(bool closing = false);
-    bool closing;
-};
+struct TexoBold {};
 
-struct TexoItalic {
-    TexoItalic(bool closing = false);
-    bool closing;
-};
+struct TexoItalic {};
 
-struct TexoUnderline {
-    TexoUnderline(bool closing = false);
-    bool closing;
-};
+struct TexoUnderline {};
 
-struct TexoStrike {
-    TexoStrike(bool closing = false);
-    bool closing;
-};
+struct TexoStrike {};
+
 
 /*
  * Texo Signals
@@ -78,11 +55,7 @@ struct TexoLink {
     ScriptVariable title;
 };
 
-struct TexoLineBreak {
-};
-
-struct TexoHorizontalRule {
-};
+struct TexoHorizontalRule {};
 
 
 #endif

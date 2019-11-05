@@ -9,11 +9,13 @@ class TexoProducer {
 public:
     TexoProducer(TexoExporter &exporter);
 
+    virtual void End();
+
     virtual void Put(char c);
     virtual void Put(const Texo &piece);
 
     virtual void Put(const TexoHeader &piece);
-    virtual void Put(const TexoParagraph &piece);
+    virtual void Put(const TexoParagraph &piece) = 0;
     virtual void Put(const TexoCode &piece);
     virtual void Put(const TexoQuote &piece);
 
@@ -25,7 +27,6 @@ public:
 
     virtual void Put(const TexoImage &piece);
     virtual void Put(const TexoLink &piece);
-    virtual void Put(const TexoLineBreak &piece);
     virtual void Put(const TexoHorizontalRule &piece);
 
 protected:

@@ -15,7 +15,6 @@ public:
     void Put(const TexoParagraph &piece);
     void Put(const TexoQuote &piece);
 
-    void Put(const TexoLineBreak &piece);
     void Put(const TexoHorizontalRule &piece);
 
 private:
@@ -27,7 +26,8 @@ private:
 class TexoImporterPlain: public TexoImporter {
 public:
     TexoImporterPlain(TexoProducer &producer);
-    ~TexoImporterPlain();
+
+    void End();
 
     void Put(char c);
     void Put(const ScriptVariable &str);
@@ -40,7 +40,8 @@ private:
         paragraph,
         quote,
         quote_newline,
-        rule
+        rule,
+        paragraph_rule
     } state;
 
     void Text(char c);
@@ -49,6 +50,7 @@ private:
     void Quote(char c);
     void QuoteNewline(char c);
     void Rule(char c);
+    void ParagraphRule(char c);
 
     int dash_count;
 };

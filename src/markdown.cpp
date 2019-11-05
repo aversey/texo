@@ -27,58 +27,41 @@ void TexoProducerMarkdown::Put(const Texo &piece)
 
 void TexoProducerMarkdown::Put(const TexoHeader &piece)
 {
-    if (piece.closing) {
-        exporter.Put('\n');
-        header  = false;
-        newline = true;
+    Close();
+    if (piece.level <= 1) {
+        exporter.Put("###### ");
+    } else if (piece.level == 2) {
+        exporter.Put("##### ");
+    } else if (piece.level == 3) {
+        exporter.Put("#### ");
+    } else if (piece.level == 4) {
+        exporter.Put("### ");
+    } else if (piece.level == 5) {
+        exporter.Put("## ");
     } else {
-        if (!newline) {
-            exporter.Put('\n');
-        }
-        if (piece.level <= 1) {
-            exporter.Put("###### ");
-        } else if (piece.level == 2) {
-            exporter.Put("##### ");
-        } else if (piece.level == 3) {
-            exporter.Put("#### ");
-        } else if (piece.level == 4) {
-            exporter.Put("### ");
-        } else if (piece.level == 5) {
-            exporter.Put("## ");
-        } else {
-            exporter.Put("# ");
-        }
-        header = true;
+        exporter.Put("# ");
     }
+    header = true;
 }
 
 void TexoProducerMarkdown::Put(const TexoParagraph &piece)
 {
-    if (piece.closing) {
-        exporter.Put("\n\n");
-        newline = true;
-    }
+    Close();
+    exporter.Put('\n');
 }
 
 void TexoProducerMarkdown::Put(const TexoCode &piece)
 {
-    exporter.Put("\n```\n");
-    code = !code;
+    Close();
+    exporter.Put("```\n");
+    code = true;
 }
 
 void TexoProducerMarkdown::Put(const TexoQuote &piece)
 {
-    if (piece.closing) {
-        exporter.Put("\n\n");
-        quoted  = false;
-        newline = true;
-    } else {
-        if (!newline) {
-            exporter.Put('\n');
-        }
-        exporter.Put(">");
-        quoted = true;
-    }
+    Close();
+    exporter.Put('>');
+    quoted = true;
 }
 
 void TexoProducerMarkdown::Put(const TexoMono &piece)
@@ -152,30 +135,31 @@ void TexoProducerMarkdown::Put(const TexoLink &piece)
     }
 }
 
-void TexoProducerMarkdown::Put(const TexoLineBreak &piece)
-{
-    exporter.Put("\\\n");
-    newline = true;
-}
-
 void TexoProducerMarkdown::Put(const TexoHorizontalRule &piece)
 {
     if (!newline) {
         exporter.Put('\n');
     }
     exporter.Put("---\n");
-    newline = false;
+    newline = true;
+}
+
+void TexoProducerMarkdown::Close()
+{
+    if (code) {
+        exporter.Put("\n```");
+        code = false;
+    }
+    exporter.Put('\n');
+    header  = false;
+    quoted  = false;
+    newline = true;
 }
 
 
 TexoImporterMarkdown::TexoImporterMarkdown(TexoProducer &producer):
-    TexoImporter(producer), state(start), wrapping_state(error), mod_pos(-1)
+    TexoImporter(producer), state(start)
 {}
-
-TexoImporterMarkdown::~TexoImporterMarkdown()
-{
-    EndBlock();
-}
 
 void TexoImporterMarkdown::Put(char c)
 {
@@ -220,22 +204,24 @@ void TexoImporterMarkdown::Start(char c)
         state        = header;
         header_level = 6;
     } else if (c == '>') {
-        BlockState(quote_text);
+        producer.Put(TexoQuote());
     } else if (c == '-') {
-        BlockState(text);
+        producer.Put(TexoParagraph());
         state           = rule;
         rule_dash_count = 1;
     } else if (c == '`') {
         state            = code;
         code_quote_count = 1;
     } else {
-        BlockState(text);
+        producer.Put(TexoParagraph());
+        state = text;
         Put(c);
     }
 }
 
 void TexoImporterMarkdown::Text(char c)
 {
+    back = text;
     switch (c) {
     case '\\': state = backslash; break;
     case '\n': state = newline;   break;
@@ -250,6 +236,7 @@ void TexoImporterMarkdown::Text(char c)
 
 void TexoImporterMarkdown::HeaderText(char c)
 {
+    back = header_text;
     switch (c) {
     case '\\': state = backslash; break;
     case '\n': state = paragraph; break;
@@ -264,6 +251,7 @@ void TexoImporterMarkdown::HeaderText(char c)
 
 void TexoImporterMarkdown::QuoteText(char c)
 {
+    back = quote_text;
     switch (c) {
     case '\\': state = backslash;     break;
     case '\n': state = quote_newline; break;
@@ -279,6 +267,7 @@ void TexoImporterMarkdown::QuoteText(char c)
 void TexoImporterMarkdown::QuoteNewline(char c)
 {
     if (c == '>') {
+        producer.Put('\n');
         state = quote_text;
     } else {
         state = paragraph;
@@ -288,6 +277,7 @@ void TexoImporterMarkdown::QuoteNewline(char c)
 
 void TexoImporterMarkdown::CodeText(char c)
 {
+    back = code_text;
     switch (c) {
     case '\\': state = backslash;    break;
     case '\n': state = code_newline; break;
@@ -319,7 +309,6 @@ void TexoImporterMarkdown::CodeEnd(char c)
     } else  if (c == '\n') {
         if (code_quote_count == 3) {
             state = paragraph;
-            Put(c);
         } else {
             state = error;
         }
@@ -331,56 +320,36 @@ void TexoImporterMarkdown::CodeEnd(char c)
 void TexoImporterMarkdown::Backslash(char c)
 {
     producer.Put(c);
-    state = wrapping_state;
+    state = back;
 }
 
 void TexoImporterMarkdown::Asterisk(char c)
 {
-    state = wrapping_state;
+    state = back;
     if (c == '*') {
-        if (CheckMods(bold)) {
-            producer.Put(TexoBold(Mod(bold)));
-        } else {
-            state = error;
-        }
+        producer.Put(TexoBold());
     } else {
-        if (CheckMods(italic)) {
-            producer.Put(TexoItalic(Mod(italic)));
-            Put(c);
-        } else {
-            state = error;
-        }
+        producer.Put(TexoItalic());
+        Put(c);
     }
 }
 
 void TexoImporterMarkdown::Underline(char c)
 {
-    state = wrapping_state;
+    state = back;
     if (c == '_') {
-        if (CheckMods(bold)) {
-            producer.Put(TexoBold(Mod(bold)));
-        } else {
-            state = error;
-        }
+        producer.Put(TexoBold());
     } else {
-        if (CheckMods(italic)) {
-            producer.Put(TexoItalic(Mod(italic)));
-            Put(c);
-        } else {
-            state = error;
-        }
+        producer.Put(TexoItalic());
+        Put(c);
     }
 }
 
 void TexoImporterMarkdown::Plus(char c)
 {
-    state = wrapping_state;
+    state = back;
     if (c == '+') {
-        if (CheckMods(underlined)) {
-            producer.Put(TexoUnderline(Mod(underlined)));
-        } else {
-            state = error;
-        }
+        producer.Put(TexoUnderline());
     } else {
         producer.Put('+');
         Put(c);
@@ -389,13 +358,9 @@ void TexoImporterMarkdown::Plus(char c)
 
 void TexoImporterMarkdown::Tilde(char c)
 {
-    state = wrapping_state;
+    state = back;
     if (c == '~') {
-        if (CheckMods(strike)) {
-            producer.Put(TexoStrike(Mod(strike)));
-        } else {
-            state = error;
-        }
+        producer.Put(TexoStrike());
     } else {
         producer.Put('~');
         Put(c);
@@ -410,7 +375,8 @@ void TexoImporterMarkdown::Newline(char c)
         state        = header;
         header_level = 6;
     } else if (c == '>') {
-        BlockState(quote_text);
+        producer.Put(TexoQuote());
+        state = quote_text;
     } else if (c == '-') {
         state           = rule;
         rule_dash_count = 1;
@@ -436,7 +402,7 @@ void TexoImporterMarkdown::Rule(char c)
         for (int i = 0; i < rule_dash_count; ++i) {
             producer.Put('-');
         }
-        state = wrapping_state;
+        state = text;
         Put(c);
     }
 }
@@ -447,16 +413,18 @@ void TexoImporterMarkdown::Paragraph(char c)
         state        = header;
         header_level = 6;
     } else if (c == '>') {
-        BlockState(quote_text);
+        producer.Put(TexoQuote());
+        state = quote_text;
     } else if (c == '-') {
-        BlockState(text);
+        producer.Put(TexoParagraph());
         state           = rule;
         rule_dash_count = 1;
     } else if (c == '`') {
         state            = code;
         code_quote_count = 1;
-    } else {
-        BlockState(text);
+    } else if (c != '\n') {
+        producer.Put(TexoParagraph());
+        state = text;
         Put(c);
     }
 }
@@ -470,8 +438,8 @@ void TexoImporterMarkdown::Header(char c)
             state = error;
         }
     } else {
-        BlockState(header_text);
-        header_level_last = header_level;
+        producer.Put(TexoHeader(header_level));
+        state = header_text;
         Put(c);
     }
 }
@@ -482,7 +450,8 @@ void TexoImporterMarkdown::Code(char c)
         ++code_quote_count;
     } else  if (c == '\n') {
         if (code_quote_count == 3) {
-            BlockState(code_text);
+            producer.Put(TexoCode());
+            state = code_text;
         } else {
             state = error;
         }
@@ -493,66 +462,5 @@ void TexoImporterMarkdown::Code(char c)
 
 void TexoImporterMarkdown::Backquote()
 {
-    if (CheckMods(mono)) {
-        producer.Put(TexoMono(Mod(mono)));
-    } else {
-        state = error;
-    }
-}
-
-bool TexoImporterMarkdown::CheckMods(Modificator mod)
-{
-    bool ok = true;
-    for (int i = 0; ok && i < mod_pos; ++i) {
-        ok = mods[i] != mod;
-    }
-    return ok;
-}
-
-bool TexoImporterMarkdown::Mod(Modificator mod)
-{
-    if (mod_pos == -1 || mods[mod_pos] != mod) {
-        ++mod_pos;
-        mods[mod_pos] = mod;
-        return false;
-    }
-    --mod_pos;
-    return true;
-}
-
-void TexoImporterMarkdown::BlockState(State st)
-{
-    if (mod_pos == -1) {
-        state = st;
-        EndBlock();
-        if (st == text) {
-            producer.Put(TexoParagraph());
-        } else if (st == quote_text) {
-            producer.Put(TexoQuote());
-        } else if (st == code_text) {
-            producer.Put(TexoCode());
-        } else if (st == header_text) {
-            producer.Put(TexoHeader(header_level));
-        } else {
-            state = error;
-        }
-        wrapping_state = st;
-    } else {
-        state = error;
-    }
-}
-
-void TexoImporterMarkdown::EndBlock()
-{
-    if (wrapping_state == text) {
-        producer.Put(TexoParagraph(true));
-    } else if (wrapping_state == quote_text) {
-        producer.Put(TexoQuote(true));
-    } else if (wrapping_state == code_text) {
-        producer.Put(TexoCode(true));
-    } else if (wrapping_state == header_text) {
-        producer.Put(TexoHeader(header_level_last, true));
-    } else if (wrapping_state != error) {
-        state = error;
-    }
+    producer.Put(TexoMono());
 }

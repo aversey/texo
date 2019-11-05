@@ -15,8 +15,6 @@ public:
     void Put(const TexoParagraph &piece);
     void Put(const TexoQuote &piece);
 
-    void Put(const TexoLineBreak &piece);
-
 private:
     bool newline;
 };
@@ -25,14 +23,12 @@ private:
 class TexoImporterLines: public TexoImporter {
 public:
     TexoImporterLines(TexoProducer &producer);
-    ~TexoImporterLines();
 
     void Put(char c);
     void Put(const ScriptVariable &str);
     void Put(FILE *file);
 
 private:
-    bool quoted;
     bool newline;
 };
 

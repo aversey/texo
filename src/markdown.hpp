@@ -25,10 +25,11 @@ public:
 
     void Put(const TexoImage &piece);
     void Put(const TexoLink &piece);
-    void Put(const TexoLineBreak &piece);
     void Put(const TexoHorizontalRule &piece);
 
 private:
+    void Close();
+
     bool quoted;
     bool newline;
     bool header;
@@ -39,7 +40,6 @@ private:
 class TexoImporterMarkdown: public TexoImporter {
 public:
     TexoImporterMarkdown(TexoProducer &producer);
-    ~TexoImporterMarkdown();
 
     void Put(char c);
     void Put(const ScriptVariable &str);
@@ -66,17 +66,7 @@ private:
         paragraph,
         header,
         code
-    } state;
-    State wrapping_state;
-    enum Modificator {
-        italic,
-        bold,
-        mono,
-        underlined,
-        strike
-    } mods[5];
-    int mod_pos;
-    int header_level_last;
+    } state, back;
     int header_level;
     int rule_dash_count;
     int code_quote_count;
@@ -101,12 +91,6 @@ private:
     void Code(char c);
 
     void Backquote();
-
-    bool CheckMods(Modificator mod);
-    bool Mod(Modificator mod);
-
-    void BlockState(State st);
-    void EndBlock();
 };
 
 

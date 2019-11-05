@@ -9,6 +9,8 @@ class TexoImporter {
 public:
     TexoImporter(TexoProducer &producer);
 
+    virtual void End();
+
     virtual void Put(char c) = 0;
     virtual void Put(const ScriptVariable &str);
     virtual void Put(FILE *file);

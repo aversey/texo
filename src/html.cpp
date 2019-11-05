@@ -2,8 +2,14 @@
 
 
 TexoProducerHTML::TexoProducerHTML(TexoExporter &exporter):
-    TexoProducer(exporter)
+    TexoProducer(exporter), opened_block(none)
 {}
+
+void TexoProducerHTML::End()
+{
+    Close();
+    opened_block = none;
+}
 
 void TexoProducerHTML::Put(const Texo &piece)
 {
@@ -17,95 +23,102 @@ void TexoProducerHTML::Put(const Texo &piece)
 
 void TexoProducerHTML::Put(const TexoHeader &piece)
 {
-    exporter.Put('<');
-    if (piece.closing) {
-        exporter.Put('/');
-    }
+    Close();
     if (piece.level <= 1) {
-        exporter.Put("h6>");
+        exporter.Put("<h6>");
+        opened_block = header_6;
     } else if (piece.level == 2) {
-        exporter.Put("h5>");
+        exporter.Put("<h5>");
+        opened_block = header_5;
     } else if (piece.level == 3) {
-        exporter.Put("h4>");
+        exporter.Put("<h4>");
+        opened_block = header_4;
     } else if (piece.level == 4) {
-        exporter.Put("h3>");
+        exporter.Put("<h3>");
+        opened_block = header_3;
     } else if (piece.level == 5) {
-        exporter.Put("h2>");
+        exporter.Put("<h2>");
+        opened_block = header_2;
     } else {
-        exporter.Put("h1>");
+        exporter.Put("<h1>");
+        opened_block = header_1;
     }
 }
 
 void TexoProducerHTML::Put(const TexoParagraph &piece)
 {
-    if (piece.closing) {
-        exporter.Put("</p>");
-    } else {
-        exporter.Put("<p>");
-    }
+    Close();
+    opened_block = paragraph;
+    exporter.Put("<p>");
 }
 
 void TexoProducerHTML::Put(const TexoCode &piece)
 {
-    if (piece.closing) {
-        exporter.Put("</pre>");
-    } else {
-        exporter.Put("<pre>");
-    }
+    Close();
+    opened_block = code;
+    exporter.Put("<pre>");
 }
 
 void TexoProducerHTML::Put(const TexoQuote &piece)
 {
-    if (piece.closing) {
-        exporter.Put("</p></blockquote>");
-    } else {
-        exporter.Put("<blockquote><p>");
-    }
+    Close();
+    opened_block = quote;
+    exporter.Put("<blockquote><p>");
 }
 
 void TexoProducerHTML::Put(const TexoMono &piece)
 {
-    if (piece.closing) {
+    static bool closing = false;
+    if (closing) {
         exporter.Put("</code>");
     } else {
         exporter.Put("<code>");
     }
+    closing = !closing;
 }
 
 void TexoProducerHTML::Put(const TexoBold &piece)
 {
-    if (piece.closing) {
+    static bool closing = false;
+    if (closing) {
         exporter.Put("</b>");
     } else {
         exporter.Put("<b>");
     }
+    closing = !closing;
 }
 
 void TexoProducerHTML::Put(const TexoItalic &piece)
 {
-    if (piece.closing) {
+    static bool closing = false;
+    if (closing) {
         exporter.Put("</i>");
     } else {
         exporter.Put("<i>");
     }
+    closing = !closing;
 }
 
 void TexoProducerHTML::Put(const TexoUnderline &piece)
 {
-    if (piece.closing) {
+    static bool closing = false;
+    if (closing) {
         exporter.Put("</ins>");
     } else {
         exporter.Put("<ins>");
     }
+    closing = !closing;
 }
 
 void TexoProducerHTML::Put(const TexoStrike &piece)
 {
-    if (piece.closing) {
+    static bool closing = false;
+    if (closing) {
         exporter.Put("</del>");
     } else {
         exporter.Put("<del>");
     }
+    closing = !closing;
 }
 
 void TexoProducerHTML::Put(const TexoImage &piece)
@@ -154,14 +167,25 @@ void TexoProducerHTML::Put(const TexoLink &piece)
     }
 }
 
-void TexoProducerHTML::Put(const TexoLineBreak &piece)
-{
-    exporter.Put("<br/>");
-}
-
 void TexoProducerHTML::Put(const TexoHorizontalRule &piece)
 {
     exporter.Put("<hr/>");
+}
+
+void TexoProducerHTML::Close()
+{
+    switch (opened_block) {
+    case none:                                         break;
+    case header_1:  exporter.Put("</h1>");             break;
+    case header_2:  exporter.Put("</h2>");             break;
+    case header_3:  exporter.Put("</h3>");             break;
+    case header_4:  exporter.Put("</h4>");             break;
+    case header_5:  exporter.Put("</h5>");             break;
+    case header_6:  exporter.Put("</h6>");             break;
+    case paragraph: exporter.Put("</p>");              break;
+    case quote:     exporter.Put("</p></blockquote>"); break;
+    case code:      exporter.Put("</pre>");            break;
+    }
 }
 
 

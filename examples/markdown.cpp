@@ -14,6 +14,7 @@ void plain()
     TexoImporterMarkdown importer(producer);
     FILE *file = fopen("markdown.md", "r");
     importer.Put(file);
+    importer.End();
     fclose(file);
 }
 
@@ -25,6 +26,7 @@ void html()
     TexoImporterMarkdown importer(producer);
     FILE *file = fopen("markdown.md", "r");
     importer.Put(file);
+    importer.End();
     fclose(file);
 }
 
@@ -36,6 +38,7 @@ void markdown()
     TexoImporterMarkdown importer(producer);
     FILE *file = fopen("markdown.md", "r");
     importer.Put(file);
+    importer.End();
     fclose(file);
 }
 
@@ -47,6 +50,7 @@ void lines()
     TexoImporterMarkdown importer(producer);
     FILE *file = fopen("markdown.md", "r");
     importer.Put(file);
+    importer.End();
     fclose(file);
 }
 

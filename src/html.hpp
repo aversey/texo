@@ -10,6 +10,8 @@ class TexoProducerHTML: public TexoProducer {
 public:
     TexoProducerHTML(TexoExporter &exporter);
 
+    void End();
+
     void Put(const Texo &piece);
 
     void Put(const TexoHeader &piece);
@@ -25,8 +27,23 @@ public:
 
     void Put(const TexoImage &piece);
     void Put(const TexoLink &piece);
-    void Put(const TexoLineBreak &piece);
     void Put(const TexoHorizontalRule &piece);
+
+private:
+    void Close();
+
+    enum {
+        none = 0,
+        header_1,
+        header_2,
+        header_3,
+        header_4,
+        header_5,
+        header_6,
+        paragraph,
+        code,
+        quote
+    } opened_block;
 };
 
 

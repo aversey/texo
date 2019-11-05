@@ -4,6 +4,11 @@
 TexoImporter::TexoImporter(TexoProducer &producer): producer(producer)
 {}
 
+void TexoImporter::End()
+{
+    producer.End();
+}
+
 void TexoImporter::Put(const ScriptVariable &str)
 {
     const int len = str.Length();

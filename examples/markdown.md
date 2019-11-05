@@ -15,9 +15,9 @@ This was horizontal rule.
 > *quote*.
 
 ```
-bool Block::is_code()
+bool Block::is\_code()
 {
-    return this->should_be();
+    **return** this->should\_be();
 }
 ```
 

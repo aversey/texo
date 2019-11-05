@@ -24,31 +24,15 @@ void TexoProducerPlain::Put(const Texo &piece)
 
 void TexoProducerPlain::Put(const TexoParagraph &piece)
 {
-    if (piece.closing) {
-        exporter.Put("\n\n");
-        newline = true;
-    }
+    exporter.Put("\n\n");
+    quoted  = false;
+    newline = true;
 }
 
 void TexoProducerPlain::Put(const TexoQuote &piece)
 {
-    if (piece.closing) {
-        exporter.Put("\n\n");
-        quoted  = false;
-        newline = true;
-    } else {
-        if (!newline) {
-            exporter.Put('\n');
-        }
-        exporter.Put(">");
-        quoted = true;
-    }
-}
-
-void TexoProducerPlain::Put(const TexoLineBreak &piece)
-{
-    exporter.Put("\n\n");
-    newline = true;
+    exporter.Put("\n\n>");
+    quoted = true;
 }
 
 void TexoProducerPlain::Put(const TexoHorizontalRule &piece)
@@ -57,7 +41,7 @@ void TexoProducerPlain::Put(const TexoHorizontalRule &piece)
         exporter.Put('\n');
     }
     exporter.Put("--------------------------------------------------\n");
-    newline = false;
+    newline = true;
 }
 
 
@@ -67,34 +51,25 @@ TexoImporterPlain::TexoImporterPlain(TexoProducer &producer):
     producer.Put(TexoParagraph());
 }
 
-TexoImporterPlain::~TexoImporterPlain()
+void TexoImporterPlain::End()
 {
-    switch (state) {
-    case rule:
-        producer.Put('\n');
-        for (;dash_count > 0; --dash_count) {
-            producer.Put('-');
-        }
-    case text: case newline:
-        producer.Put(TexoParagraph(true));
-        break;
-    case quote: case quote_newline:
-        producer.Put(TexoQuote(true));
-        break;
-    case paragraph:
-        break;
+    if (state == rule) {
+        producer.Put(TexoHorizontalRule());
+        state = text;
     }
+    producer.End();
 }
 
 void TexoImporterPlain::Put(char c)
 {
     switch (state) {
-    case text:          Text(c);         break;
-    case newline:       Newline(c);      break;
-    case paragraph:     Paragraph(c);    break;
-    case quote:         Quote(c);        break;
-    case quote_newline: QuoteNewline(c); break;
-    case rule:          Rule(c);         break;
+    case text:           Text(c);          break;
+    case newline:        Newline(c);       break;
+    case paragraph:      Paragraph(c);     break;
+    case quote:          Quote(c);         break;
+    case quote_newline:  QuoteNewline(c);  break;
+    case rule:           Rule(c);          break;
+    case paragraph_rule: ParagraphRule(c); break;
     }
 }
 
@@ -133,14 +108,12 @@ void TexoImporterPlain::Newline(char c)
 void TexoImporterPlain::Paragraph(char c)
 {
     if (c == '>') {
-        producer.Put(TexoParagraph(true));
         producer.Put(TexoQuote());
         state = quote;
     } else if (c == '-') {
         dash_count = 1;
-        state = rule;
+        state = paragraph_rule;
     } else if (c != '\n') {
-        producer.Put(TexoParagraph(true));
         producer.Put(TexoParagraph());
         state = text;
         Text(c);
@@ -161,16 +134,11 @@ void TexoImporterPlain::QuoteNewline(char c)
         producer.Put('\n');
         state = quote;
     } else if (c == '\n') {
-        producer.Put(TexoQuote(true));
-        producer.Put(TexoParagraph());
         state = paragraph;
     } else if (c == '-') {
-        producer.Put(TexoQuote(true));
-        producer.Put(TexoParagraph());
         dash_count = 1;
-        state = rule;
+        state = paragraph_rule;
     } else {
-        producer.Put(TexoQuote(true));
         producer.Put(TexoParagraph());
         state = text;
         Text(c);
@@ -192,4 +160,12 @@ void TexoImporterPlain::Rule(char c)
         state = text;
         Text(c);
     }
+}
+
+void TexoImporterPlain::ParagraphRule(char c)
+{
+    if (c == '\n') {
+        producer.Put(TexoParagraph());
+    }
+    Rule(c);
 }

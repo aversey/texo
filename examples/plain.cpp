@@ -14,6 +14,7 @@ void plain()
     TexoImporterPlain importer(producer);
     FILE *file = fopen("plain.txt", "r");
     importer.Put(file);
+    importer.End();
     fclose(file);
 }
 
@@ -25,6 +26,7 @@ void html()
     TexoImporterPlain importer(producer);
     FILE *file = fopen("plain.txt", "r");
     importer.Put(file);
+    importer.End();
     fclose(file);
 }
 
@@ -36,6 +38,7 @@ void markdown()
     TexoImporterPlain importer(producer);
     FILE *file = fopen("plain.txt", "r");
     importer.Put(file);
+    importer.End();
     fclose(file);
 }
 
@@ -47,6 +50,7 @@ void lines()
     TexoImporterPlain importer(producer);
     FILE *file = fopen("plain.txt", "r");
     importer.Put(file);
+    importer.End();
     fclose(file);
 }
 
