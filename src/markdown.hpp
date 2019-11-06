@@ -10,6 +10,8 @@ class TexoProducerMarkdown: public TexoProducer {
 public:
     TexoProducerMarkdown(TexoExporter &exporter);
 
+    void End();
+
     void Put(const Texo &piece);
 
     void Put(const TexoHeader &piece);
@@ -34,6 +36,7 @@ private:
     bool newline;
     bool header;
     bool code;
+    bool nospace;
 };
 
 
@@ -51,6 +54,7 @@ private:
         start,
         text,
         header_text,
+        quote_pre,
         quote_text,
         quote_newline,
         code_text,
@@ -65,6 +69,7 @@ private:
         rule,
         paragraph,
         header,
+        header_pre,
         code
     } state, back;
     int header_level;
@@ -74,6 +79,7 @@ private:
     void Start(char c);
     void Text(char c);
     void HeaderText(char c);
+    void QuotePre(char c);
     void QuoteText(char c);
     void QuoteNewline(char c);
     void CodeText(char c);
@@ -88,6 +94,7 @@ private:
     void Rule(char c);
     void Paragraph(char c);
     void Header(char c);
+    void HeaderPre(char c);
     void Code(char c);
 
     void Backquote();

@@ -47,14 +47,4 @@ private:
 };
 
 
-class TexoImporterHTML: public TexoImporter {
-public:
-    TexoImporterHTML(TexoProducer &producer);
-
-    void Put(char c);
-    void Put(const ScriptVariable &str);
-    void Put(FILE *file);
-};
-
-
 #endif

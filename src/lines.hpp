@@ -10,6 +10,8 @@ class TexoProducerLines: public TexoProducer {
 public:
     TexoProducerLines(TexoExporter &exporter);
 
+    void End();
+
     void Put(const Texo &piece);
 
     void Put(const TexoParagraph &piece);
@@ -30,6 +32,7 @@ public:
 
 private:
     bool newline;
+    bool quote;
 };
 
 

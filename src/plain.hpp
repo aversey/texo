@@ -10,6 +10,8 @@ class TexoProducerPlain: public TexoProducer {
 public:
     TexoProducerPlain(TexoExporter &exporter);
 
+    void End();
+
     void Put(const Texo &piece);
 
     void Put(const TexoParagraph &piece);
@@ -20,6 +22,7 @@ public:
 private:
     bool quoted;
     bool newline;
+    bool nospace;
 };
 
 
@@ -38,6 +41,7 @@ private:
         text,
         newline,
         paragraph,
+        quote_pre,
         quote,
         quote_newline,
         rule,
@@ -47,6 +51,7 @@ private:
     void Text(char c);
     void Newline(char c);
     void Paragraph(char c);
+    void QuotePre(char c);
     void Quote(char c);
     void QuoteNewline(char c);
     void Rule(char c);

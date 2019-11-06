@@ -8,7 +8,7 @@
 
 void plain()
 {
-    fputs("  ----  Plain to Plain  ----\n\n", stdout);
+    fputs("  ----  Plain to Plain  ----\n", stdout);
     TexoExporterFile exporter(stdout);
     TexoProducerPlain producer(exporter);
     TexoImporterPlain importer(producer);
@@ -20,7 +20,7 @@ void plain()
 
 void html()
 {
-    fputs("\n\n  ----  Plain to HTML  ----\n\n", stdout);
+    fputs("\n  ----  Plain to HTML  ----\n", stdout);
     TexoExporterFile exporter(stdout);
     TexoProducerHTML producer(exporter);
     TexoImporterPlain importer(producer);
@@ -32,7 +32,7 @@ void html()
 
 void markdown()
 {
-    fputs("\n\n  ----  Plain to Markdown  ----\n\n", stdout);
+    fputs("\n  ----  Plain to Markdown  ----\n", stdout);
     TexoExporterFile exporter(stdout);
     TexoProducerMarkdown producer(exporter);
     TexoImporterPlain importer(producer);
@@ -44,7 +44,7 @@ void markdown()
 
 void lines()
 {
-    fputs("\n\n  ----  Plain to Lines  ----\n\n", stdout);
+    fputs("\n  ----  Plain to Lines  ----\n", stdout);
     TexoExporterFile exporter(stdout);
     TexoProducerLines producer(exporter);
     TexoImporterPlain importer(producer);
