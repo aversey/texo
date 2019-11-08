@@ -6,44 +6,44 @@
 #include "importer.hpp"
 
 
-class TexoProducerHTML: public TexoProducer {
+class TexoProducerHTML: public TexoProducerStrict {
 public:
     TexoProducerHTML(TexoExporter &exporter);
 
-    void End();
+protected:
+    bool TruePut(char c);
 
-    void Put(const Texo &piece);
+    bool StartCode();
+    bool StartHeader(int level);
+    bool StartParagraph();
+    bool StartQuote();
 
-    void Put(const TexoHeader &piece);
-    void Put(const TexoParagraph &piece);
-    void Put(const TexoCode &piece);
-    void Put(const TexoQuote &piece);
+    bool CloseCode();
+    bool CloseHeader(int level);
+    bool CloseParagraph();
+    bool CloseQuote();
 
-    void Put(const TexoMono &piece);
-    void Put(const TexoBold &piece);
-    void Put(const TexoItalic &piece);
-    void Put(const TexoUnderline &piece);
-    void Put(const TexoStrike &piece);
+    bool StartBold();
+    bool StartItalic();
+    bool StartMono();
+    bool StartStrike();
+    bool StartUnderline();
 
-    void Put(const TexoImage &piece);
-    void Put(const TexoLink &piece);
-    void Put(const TexoHorizontalRule &piece);
+    bool CloseBold();
+    bool CloseItalic();
+    bool CloseMono();
+    bool CloseStrike();
+    bool CloseUnderline();
 
-private:
-    void Close();
+    bool StartLink(const ScriptVariable &link, const ScriptVariable &title);
+    bool CloseLink(const ScriptVariable &link, const ScriptVariable &title);
 
-    enum {
-        none = 0,
-        header_1,
-        header_2,
-        header_3,
-        header_4,
-        header_5,
-        header_6,
-        paragraph,
-        code,
-        quote
-    } opened_block;
+    bool TruePutImage(
+        const ScriptVariable &src,
+        const ScriptVariable &alt,
+        const ScriptVariable &title
+    );
+    bool TruePutHorizontalRule();
 };
 
 

@@ -1,27 +1,58 @@
 #include "importer.hpp"
 
 
-TexoImporter::TexoImporter(TexoProducer &producer): producer(producer)
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Texo Importer
+ */
+TexoImporter::TexoImporter(TexoProducer &producer):
+    producer(producer), ok(true)
 {}
 
-void TexoImporter::End()
+TexoImporter::~TexoImporter()  { End(); }
+
+
+bool TexoImporter::End()
 {
-    producer.End();
+    return ok = ok && TrueEnd();
 }
 
-void TexoImporter::Put(const ScriptVariable &str)
+bool TexoImporter::Put(char c)
+{
+    return ok = ok && TruePut(c);
+}
+
+bool TexoImporter::Put(const ScriptVariable &s)
+{
+    return ok = ok && TruePut(s);
+}
+
+bool TexoImporter::Put(FILE *f)
+{
+    return ok = ok && TruePut(f);
+}
+
+
+bool TexoImporter::TrueEnd()
+{
+    return producer.End();
+}
+
+
+bool TexoImporter::TruePut(const ScriptVariable &str)
 {
     const int len = str.Length();
-    for (int i = 0; i < len; ++i) {
-        Put(str[i]);
+    for (int i = 0; ok && i < len; ++i) {
+        ok = TruePut(str[i]);
     }
+    return ok;
 }
 
-void TexoImporter::Put(FILE *file)
+bool TexoImporter::TruePut(FILE *file)
 {
     if (file) {
-        for (int c = fgetc(file); c != EOF; c = fgetc(file)) {
-            Put(c);
+        for (int c = fgetc(file); ok && c != EOF; c = fgetc(file)) {
+            ok = TruePut(c);
         }
     }
+    return ok;
 }

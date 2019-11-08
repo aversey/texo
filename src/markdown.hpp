@@ -10,33 +10,44 @@ class TexoProducerMarkdown: public TexoProducer {
 public:
     TexoProducerMarkdown(TexoExporter &exporter);
 
-    void End();
+    bool End();
 
-    void Put(const Texo &piece);
+    bool Put(char c);
 
-    void Put(const TexoHeader &piece);
-    void Put(const TexoParagraph &piece);
-    void Put(const TexoCode &piece);
-    void Put(const TexoQuote &piece);
+    bool Code();
+    bool Header(int level);
+    bool Paragraph();
+    bool Quote();
 
-    void Put(const TexoMono &piece);
-    void Put(const TexoBold &piece);
-    void Put(const TexoItalic &piece);
-    void Put(const TexoUnderline &piece);
-    void Put(const TexoStrike &piece);
+    bool Bold();
+    bool Italic();
+    bool Mono();
+    bool Strike();
+    bool Underline();
 
-    void Put(const TexoImage &piece);
-    void Put(const TexoLink &piece);
-    void Put(const TexoHorizontalRule &piece);
+    bool Link(const ScriptVariable &link, const ScriptVariable &title);
+    bool Link();
+
+    bool PutImage(
+        const ScriptVariable &src,
+        const ScriptVariable &alt,
+        const ScriptVariable &title
+    );
+    bool PutHorizontalRule();
 
 private:
-    void Close();
+    bool Mod(const ScriptVariable &str);
+    bool Close();
+    bool CloseLink();
 
     bool quoted;
     bool newline;
     bool header;
     bool code;
     bool nospace;
+
+    ScriptVariable link_link;
+    ScriptVariable link_title;
 };
 
 
@@ -44,13 +55,13 @@ class TexoImporterMarkdown: public TexoImporter {
 public:
     TexoImporterMarkdown(TexoProducer &producer);
 
-    void Put(char c);
-    void Put(const ScriptVariable &str);
-    void Put(FILE *file);
+
+protected:
+    bool TruePut(char c);
+
 
 private:
     enum State {
-        error,
         start,
         text,
         header_text,

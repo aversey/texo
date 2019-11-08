@@ -1,85 +1,91 @@
 #include "lines.hpp"
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Texo Lines Producer
+ */
 TexoProducerLines::TexoProducerLines(TexoExporter &exporter):
     TexoProducer(exporter), newline(true)
 {}
 
-void TexoProducerLines::End()
+
+bool TexoProducerLines::End()
 {
     if (!newline) {
         exporter.Put('\n');
         newline = true;
     }
+    return true;
 }
 
-void TexoProducerLines::Put(const Texo &piece)
+
+bool TexoProducerLines::Put(char c)
 {
-    if (piece.c == '\n') {
+    if (c == '\n') {
         if (!newline) {
             exporter.Put(' ');
             newline = true;
         }
     } else {
-        exporter.Put(piece.c);
+        exporter.Put(c);
         newline = false;
     }
+    return true;
 }
 
-void TexoProducerLines::Put(const TexoParagraph &piece)
+
+bool TexoProducerLines::Paragraph()
 {
     if (!newline) {
         exporter.Put('\n');
         newline = true;
     }
+    return true;
 }
 
-void TexoProducerLines::Put(const TexoQuote &piece)
+bool TexoProducerLines::Quote()
 {
     if (!newline) {
         exporter.Put('\n');
     }
     exporter.Put("> ");
     newline = false;
+    return true;
 }
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Texo Lines Importer
+ */
 TexoImporterLines::TexoImporterLines(TexoProducer &producer):
     TexoImporter(producer), newline(true), quote(false)
 {}
 
-void TexoImporterLines::Put(char c)
+
+bool TexoImporterLines::TruePut(char c)
 {
     if (c == '\n') {
         if (!newline) {
             newline = true;
             quote   = false;
         }
+        return true;
     } else if (newline) {
-        if (c == '>') {
-            producer.Put(TexoQuote());
-            quote = true;
-        } else {
-            producer.Put(TexoParagraph());
-            producer.Put(c);
-        }
         newline = false;
+        if (c == '>') {
+            quote = true;
+            return producer.Quote();
+        } else {
+            return producer.Paragraph() && producer.Put(c);
+        }
     } else if (quote) {
         if (c != ' ') {
             quote = false;
-            producer.Put(c);
+            return producer.Put(c);
+        } else {
+            return true;
         }
     } else {
-        producer.Put(c);
+        return producer.Put(c);
     }
-}
-
-void TexoImporterLines::Put(const ScriptVariable &str)
-{
-    TexoImporter::Put(str);
-}
-
-void TexoImporterLines::Put(FILE *file)
-{
-    TexoImporter::Put(file);
 }

@@ -5,18 +5,34 @@
 #include <stdio.h>
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Texo Importer
+ * Texo interface for parsers from input characters into inner representation,
+ * described by Texo Producer.
+ */
 class TexoImporter {
 public:
     TexoImporter(TexoProducer &producer);
+    ~TexoImporter();
 
-    virtual void End();
 
-    virtual void Put(char c) = 0;
-    virtual void Put(const ScriptVariable &str);
-    virtual void Put(FILE *file);
+    bool End();
+    bool Put(char c);
+    bool Put(const ScriptVariable &s);
+    bool Put(FILE *f);
+
 
 protected:
+    virtual bool TrueEnd();
+
+
+    virtual bool TruePut(char c) = 0;
+    virtual bool TruePut(const ScriptVariable &str);
+    virtual bool TruePut(FILE *file);
+
+
     TexoProducer &producer;
+    bool         ok;
 };
 
 

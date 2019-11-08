@@ -5,12 +5,18 @@
 #include <stdio.h>
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Texo File Exporter
+ * Simple utility class to make output into FILE *variable.
+ */
 class TexoExporterFile: public TexoExporter {
 public:
     TexoExporterFile(FILE *file);
 
-    void Put(char c);
-    void Put(const ScriptVariable &str);
+
+    bool Put(char c);
+    bool Put(const ScriptVariable &str);
+
 
 private:
     FILE *file;

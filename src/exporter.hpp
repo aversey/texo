@@ -4,10 +4,14 @@
 #include <scrvar.hpp>
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Texo Exporter
+ * Texo interface for outputting.
+ */
 class TexoExporter {
 public:
-    virtual void Put(char c) = 0;
-    virtual void Put(const ScriptVariable &str);
+    virtual bool Put(char c) = 0;
+    virtual bool Put(const ScriptVariable &str);
 };
 
 
