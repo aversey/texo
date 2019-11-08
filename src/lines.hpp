@@ -6,29 +6,40 @@
 #include "importer.hpp"
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Texo Lines Producer
+ */
 class TexoProducerLines: public TexoProducer {
 public:
     TexoProducerLines(TexoExporter &exporter);
 
-    void End();
 
-    void Put(const Texo &piece);
+    bool End();
 
-    void Put(const TexoParagraph &piece);
-    void Put(const TexoQuote &piece);
+
+    bool Put(char c);
+
+
+    bool Paragraph();
+    bool Quote();
+
 
 private:
     bool newline;
 };
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Texo Lines Importer
+ */
 class TexoImporterLines: public TexoImporter {
 public:
     TexoImporterLines(TexoProducer &producer);
 
-    void Put(char c);
-    void Put(const ScriptVariable &str);
-    void Put(FILE *file);
+
+protected:
+    bool TruePut(char c);
+
 
 private:
     bool newline;

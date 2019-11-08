@@ -6,18 +6,21 @@
 #include "importer.hpp"
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Texo Plain Producer
+ */
 class TexoProducerPlain: public TexoProducer {
 public:
     TexoProducerPlain(TexoExporter &exporter);
 
-    void End();
+    bool End();
 
-    void Put(const Texo &piece);
+    bool Put(char c);
 
-    void Put(const TexoParagraph &piece);
-    void Put(const TexoQuote &piece);
+    bool Paragraph();
+    bool Quote();
 
-    void Put(const TexoHorizontalRule &piece);
+    bool PutHorizontalRule();
 
 private:
     bool quoted;
@@ -26,15 +29,20 @@ private:
 };
 
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Texo Plain Importer
+ */
 class TexoImporterPlain: public TexoImporter {
 public:
     TexoImporterPlain(TexoProducer &producer);
 
-    void End();
 
-    void Put(char c);
-    void Put(const ScriptVariable &str);
-    void Put(FILE *file);
+protected:
+    bool TrueEnd();
+
+
+    bool TruePut(char c);
+
 
 private:
     enum State {

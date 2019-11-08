@@ -2,188 +2,153 @@
 
 
 TexoProducerHTML::TexoProducerHTML(TexoExporter &exporter):
-    TexoProducer(exporter), opened_block(none)
+    TexoProducerStrict(exporter)
 {}
 
-void TexoProducerHTML::End()
-{
-    Close();
-    opened_block = none;
-}
 
-void TexoProducerHTML::Put(const Texo &piece)
+bool TexoProducerHTML::TruePut(char c)
 {
-    switch (piece.c) {
-    case '<': exporter.Put("&lt;");  break;
-    case '>': exporter.Put("&gt;");  break;
-    case '&': exporter.Put("&amp;"); break;
-    default:  exporter.Put(piece.c); break;
+    switch (c) {
+    case '<': return exporter.Put("&lt;");  break;
+    case '>': return exporter.Put("&gt;");  break;
+    case '&': return exporter.Put("&amp;"); break;
+    default:  return exporter.Put(c);
     }
 }
 
-void TexoProducerHTML::Put(const TexoHeader &piece)
+
+bool TexoProducerHTML::StartCode()
 {
-    Close();
-    if (piece.level <= 1) {
-        exporter.Put("\n<h6>\n");
-        opened_block = header_6;
-    } else if (piece.level == 2) {
-        exporter.Put("\n<h5>\n");
-        opened_block = header_5;
-    } else if (piece.level == 3) {
-        exporter.Put("\n<h4>\n");
-        opened_block = header_4;
-    } else if (piece.level == 4) {
-        exporter.Put("\n<h3>\n");
-        opened_block = header_3;
-    } else if (piece.level == 5) {
-        exporter.Put("\n<h2>\n");
-        opened_block = header_2;
+    return exporter.Put("\n<pre>\n");
+}
+
+bool TexoProducerHTML::StartHeader(int level)
+{
+    if (level <= 1) {
+        return exporter.Put("\n<h6>\n");
+    } else if (level == 2) {
+        return exporter.Put("\n<h5>\n");
+    } else if (level == 3) {
+        return exporter.Put("\n<h4>\n");
+    } else if (level == 4) {
+        return exporter.Put("\n<h3>\n");
+    } else if (level == 5) {
+        return exporter.Put("\n<h2>\n");
     } else {
-        exporter.Put("\n<h1>\n");
-        opened_block = header_1;
+        return exporter.Put("\n<h1>\n");
     }
 }
 
-void TexoProducerHTML::Put(const TexoParagraph &piece)
+bool TexoProducerHTML::StartParagraph()
 {
-    Close();
-    opened_block = paragraph;
-    exporter.Put("\n<p>\n");
+    return exporter.Put("\n<p>\n");
 }
 
-void TexoProducerHTML::Put(const TexoCode &piece)
+bool TexoProducerHTML::StartQuote()
 {
-    Close();
-    opened_block = code;
-    exporter.Put("\n<pre>\n");
+    return exporter.Put("\n<blockquote><p>\n");
 }
 
-void TexoProducerHTML::Put(const TexoQuote &piece)
+bool TexoProducerHTML::CloseCode()
 {
-    Close();
-    opened_block = quote;
-    exporter.Put("\n<blockquote><p>\n");
+    return exporter.Put("\n</pre>\n");
 }
 
-void TexoProducerHTML::Put(const TexoMono &piece)
+bool TexoProducerHTML::CloseHeader(int level)
 {
-    static bool closing = false;
-    if (closing) {
-        exporter.Put("</code>");
+    if (level <= 1) {
+        return exporter.Put("\n</h6>\n");
+    } else if (level == 2) {
+        return exporter.Put("\n</h5>\n");
+    } else if (level == 3) {
+        return exporter.Put("\n</h4>\n");
+    } else if (level == 4) {
+        return exporter.Put("\n</h3>\n");
+    } else if (level == 5) {
+        return exporter.Put("\n</h2>\n");
     } else {
-        exporter.Put("<code>");
+        return exporter.Put("\n</h1>\n");
     }
-    closing = !closing;
 }
 
-void TexoProducerHTML::Put(const TexoBold &piece)
+bool TexoProducerHTML::CloseParagraph()
 {
-    static bool closing = false;
-    if (closing) {
-        exporter.Put("</b>");
-    } else {
-        exporter.Put("<b>");
-    }
-    closing = !closing;
+    return exporter.Put("\n</p>\n");
 }
 
-void TexoProducerHTML::Put(const TexoItalic &piece)
+bool TexoProducerHTML::CloseQuote()
 {
-    static bool closing = false;
-    if (closing) {
-        exporter.Put("</i>");
-    } else {
-        exporter.Put("<i>");
-    }
-    closing = !closing;
+    return exporter.Put("\n</p></blockquote>\n");
 }
 
-void TexoProducerHTML::Put(const TexoUnderline &piece)
-{
-    static bool closing = false;
-    if (closing) {
-        exporter.Put("</ins>");
-    } else {
-        exporter.Put("<ins>");
-    }
-    closing = !closing;
-}
 
-void TexoProducerHTML::Put(const TexoStrike &piece)
-{
-    static bool closing = false;
-    if (closing) {
-        exporter.Put("</del>");
-    } else {
-        exporter.Put("<del>");
-    }
-    closing = !closing;
-}
+bool TexoProducerHTML::StartBold()       { return exporter.Put("<b>"); }
+bool TexoProducerHTML::StartItalic()     { return exporter.Put("<i>"); }
+bool TexoProducerHTML::StartMono()       { return exporter.Put("<code>"); }
+bool TexoProducerHTML::StartStrike()     { return exporter.Put("<del>"); }
+bool TexoProducerHTML::StartUnderline()  { return exporter.Put("<ins>"); }
 
-void TexoProducerHTML::Put(const TexoImage &piece)
+bool TexoProducerHTML::CloseBold()       { return exporter.Put("</b>"); }
+bool TexoProducerHTML::CloseItalic()     { return exporter.Put("</i>"); }
+bool TexoProducerHTML::CloseMono()       { return exporter.Put("</code>"); }
+bool TexoProducerHTML::CloseStrike()     { return exporter.Put("</del>"); }
+bool TexoProducerHTML::CloseUnderline()  { return exporter.Put("</ins>"); }
+
+bool TexoProducerHTML::StartLink(
+    const ScriptVariable &link,
+    const ScriptVariable &title
+)
 {
-    if (piece.path != "") {
-        bool link  = piece.link != "";
-        bool title = piece.title != "";
-        if (link) {
-            exporter.Put("<a href='");
-            exporter.Put(piece.link);
-            if (title) {
-                exporter.Put("' title='");
-                exporter.Put(piece.title);
-            }
-            exporter.Put("'>");
+    bool ok = true;
+    if (link != "") {
+        ok = ok && exporter.Put("<a href='");
+        ok = ok && exporter.Put(link);
+        if (title != "") {
+            ok = ok && exporter.Put("' title='");
+            ok = ok && exporter.Put(title);
         }
-        exporter.Put("<img src='");
-        exporter.Put(piece.path);
-        if (piece.alt != "") {
-            exporter.Put("' alt='");
-            exporter.Put(piece.alt);
-        }
-        if (title) {
-            exporter.Put("' title='");
-            exporter.Put(piece.title);
-        }
-        exporter.Put("'/>");
-        if (link) {
-            exporter.Put("</a>");
-        }
+        ok = ok && exporter.Put("'>");
+    }
+    return ok;
+}
+
+bool TexoProducerHTML::CloseLink(
+    const ScriptVariable &link,
+    const ScriptVariable &title
+)
+{
+    if (link != "") {
+        return exporter.Put("</a>");
+    } else {
+        return true;
     }
 }
 
-void TexoProducerHTML::Put(const TexoLink &piece)
+
+bool TexoProducerHTML::TruePutImage(
+    const ScriptVariable &src,
+    const ScriptVariable &alt,
+    const ScriptVariable &title
+)
 {
-    if (piece.text != "" && piece.link != "") {
-        exporter.Put("<a href='");
-        exporter.Put(piece.link);
-        if (piece.title != "") {
-            exporter.Put("' title='");
-            exporter.Put(piece.title);
+    bool ok = true;
+    if (src != "") {
+        ok = ok && exporter.Put("<img src='");
+        ok = ok && exporter.Put(src);
+        if (alt != "") {
+            ok = ok && exporter.Put("' alt='");
+            ok = ok && exporter.Put(alt);
         }
-        exporter.Put("'>");
-        exporter.Put(piece.text);
-        exporter.Put("</a>");
+        if (title != "") {
+            ok = ok && exporter.Put("' title='");
+            ok = ok && exporter.Put(title);
+        }
+        ok = ok && exporter.Put("'/>");
     }
+    return ok;
 }
 
-void TexoProducerHTML::Put(const TexoHorizontalRule &piece)
+bool TexoProducerHTML::TruePutHorizontalRule()
 {
-    exporter.Put("\n<hr/>\n");
-}
-
-void TexoProducerHTML::Close()
-{
-    switch (opened_block) {
-    case none:                                         break;
-    case header_1:  exporter.Put("\n</h1>\n");             break;
-    case header_2:  exporter.Put("\n</h2>\n");             break;
-    case header_3:  exporter.Put("\n</h3>\n");             break;
-    case header_4:  exporter.Put("\n</h4>\n");             break;
-    case header_5:  exporter.Put("\n</h5>\n");             break;
-    case header_6:  exporter.Put("\n</h6>\n");             break;
-    case paragraph: exporter.Put("\n</p>\n");              break;
-    case quote:     exporter.Put("\n</p></blockquote>\n"); break;
-    case code:      exporter.Put("\n</pre>\n");            break;
-    }
+    return exporter.Put("\n<hr/>\n");
 }
