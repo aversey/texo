@@ -2,13 +2,13 @@
 #define TEXO_INCLUDED_MARKDOWN
 
 #include "exporter.hpp"
-#include "producer.hpp"
 #include "importer.hpp"
+#include "producer.hpp"
 
 
 class TexoProducerMarkdown: public TexoProducer {
 public:
-    TexoProducerMarkdown(TexoExporter &exporter);
+    TexoProducerMarkdown(TexoExporter & exporter);
 
     bool End();
 
@@ -25,18 +25,15 @@ public:
     bool Strike();
     bool Underline();
 
-    bool Link(const ScriptVariable &link, const ScriptVariable &title);
+    bool Link(const ScriptVariable & link, const ScriptVariable & title);
     bool Link();
 
-    bool PutImage(
-        const ScriptVariable &src,
-        const ScriptVariable &alt,
-        const ScriptVariable &title
-    );
+    bool PutImage(const ScriptVariable & src, const ScriptVariable & alt,
+        const ScriptVariable & title);
     bool PutHorizontalRule();
 
 private:
-    bool Mod(const ScriptVariable &str);
+    bool Mod(const ScriptVariable & str);
     bool Close();
     bool CloseLink();
 
@@ -53,7 +50,7 @@ private:
 
 class TexoImporterMarkdown: public TexoImporter {
 public:
-    TexoImporterMarkdown(TexoProducer &producer);
+    TexoImporterMarkdown(TexoProducer & producer);
 
 
 protected:
@@ -82,7 +79,8 @@ private:
         header,
         header_pre,
         code
-    } state, back;
+    } state,
+        back;
     int header_level;
     int rule_dash_count;
     int code_quote_count;

@@ -4,7 +4,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Producer
  */
-TexoProducer::TexoProducer(TexoExporter &exporter): exporter(exporter)
+TexoProducer::TexoProducer(TexoExporter & exporter): exporter(exporter)
 {}  // Just save exporter for future use.
 
 
@@ -23,23 +23,51 @@ bool TexoProducer::Put(char c)
 // Block Signal Handlers
 // By default, nothing has to be done, and no error produced,
 // except for paragraphs, which must be implemented.
-bool TexoProducer::Code()             { return true; }
-bool TexoProducer::Header(int level)  { return true; }
-bool TexoProducer::Quote()            { return true; }
+bool TexoProducer::Code()
+{
+    return true;
+}
+
+bool TexoProducer::Header(int level)
+{
+    return true;
+}
+
+bool TexoProducer::Quote()
+{
+    return true;
+}
 
 
 // Modificator Signal Handlers
 // By default, nothing has to be done, and no error produced.
-bool TexoProducer::Bold()             { return true; }
-bool TexoProducer::Italic()           { return true; }
-bool TexoProducer::Mono()             { return true; }
-bool TexoProducer::Strike()           { return true; }
-bool TexoProducer::Underline()        { return true; }
+bool TexoProducer::Bold()
+{
+    return true;
+}
+
+bool TexoProducer::Italic()
+{
+    return true;
+}
+
+bool TexoProducer::Mono()
+{
+    return true;
+}
+
+bool TexoProducer::Strike()
+{
+    return true;
+}
+
+bool TexoProducer::Underline()
+{
+    return true;
+}
 
 bool TexoProducer::Link(
-    const ScriptVariable &link,
-    const ScriptVariable &title
-)
+    const ScriptVariable & link, const ScriptVariable & title)
 {
     return true;
 }
@@ -50,11 +78,8 @@ bool TexoProducer::Link()
 }
 
 
-bool TexoProducer::PutImage(
-    const ScriptVariable &src,
-    const ScriptVariable &alt,
-    const ScriptVariable &title
-)
+bool TexoProducer::PutImage(const ScriptVariable & src,
+    const ScriptVariable & alt, const ScriptVariable & title)
 {
     return true;
 }
@@ -68,7 +93,7 @@ bool TexoProducer::PutHorizontalRule()
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Strict Producer
  */
-TexoProducerStrict::TexoProducerStrict(TexoExporter &exporter):
+TexoProducerStrict::TexoProducerStrict(TexoExporter & exporter):
     TexoProducer(exporter), block(block_none), opened(0)
 {}
 
@@ -155,9 +180,7 @@ bool TexoProducerStrict::Underline()
 }
 
 bool TexoProducerStrict::Link(
-    const ScriptVariable &path,
-    const ScriptVariable &title
-)
+    const ScriptVariable & path, const ScriptVariable & title)
 {
     if (IsOpened(link)) {
         int closed = CloseMods(link);
@@ -186,11 +209,8 @@ bool TexoProducerStrict::Link()
     return true;
 }
 
-bool TexoProducerStrict::PutImage(
-    const ScriptVariable &src,
-    const ScriptVariable &alt,
-    const ScriptVariable &title
-)
+bool TexoProducerStrict::PutImage(const ScriptVariable & src,
+    const ScriptVariable & alt, const ScriptVariable & title)
 {
     return Start() && TruePutImage(src, alt, title);
 }
@@ -215,11 +235,16 @@ bool TexoProducerStrict::CloseBlock()
 {
     if (CloseMods()) {
         switch (block) {
-        case block_none: return true;
-        case code:       return CloseCode();
-        case header:     return CloseHeader(header_level);
-        case paragraph:  return CloseParagraph();
-        case quote:      return CloseQuote();
+        case block_none:
+            return true;
+        case code:
+            return CloseCode();
+        case header:
+            return CloseHeader(header_level);
+        case paragraph:
+            return CloseParagraph();
+        case quote:
+            return CloseQuote();
         }
         return true;  // Inpossible, since all cases are in switch.
     } else {
@@ -246,12 +271,18 @@ bool TexoProducerStrict::OpenMod(Mod mod)
     mods[opened] = mod;
     ++opened;
     switch (mod) {
-    case bold:      return StartBold();
-    case italic:    return StartItalic();
-    case link:      return StartLink(*link_link, *link_title);
-    case mono:      return StartMono();
-    case strike:    return StartStrike();
-    case underline: return StartUnderline();
+    case bold:
+        return StartBold();
+    case italic:
+        return StartItalic();
+    case link:
+        return StartLink(*link_link, *link_title);
+    case mono:
+        return StartMono();
+    case strike:
+        return StartStrike();
+    case underline:
+        return StartUnderline();
     }
     return true;  // Inpossible, since all cases are in switch.
 }
@@ -259,12 +290,18 @@ bool TexoProducerStrict::OpenMod(Mod mod)
 bool TexoProducerStrict::CloseMod(Mod mod)
 {
     switch (mod) {
-    case bold:      return CloseBold();
-    case italic:    return CloseItalic();
-    case link:      return CloseLink(*link_link, *link_title);
-    case mono:      return CloseMono();
-    case strike:    return CloseStrike();
-    case underline: return CloseUnderline();
+    case bold:
+        return CloseBold();
+    case italic:
+        return CloseItalic();
+    case link:
+        return CloseLink(*link_link, *link_title);
+    case mono:
+        return CloseMono();
+    case strike:
+        return CloseStrike();
+    case underline:
+        return CloseUnderline();
     }
     return true;  // Inpossible, since all cases are in switch.
 }

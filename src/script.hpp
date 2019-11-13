@@ -10,15 +10,15 @@
  */
 class TexoExporterString: public TexoExporter {
 public:
-    TexoExporterString(ScriptVariable &str);
+    TexoExporterString(ScriptVariable & str);
 
 
     bool Put(char c);
-    bool Put(const ScriptVariable &addon);
+    bool Put(const ScriptVariable & addon);
 
 
 private:
-    ScriptVariable &str;
+    ScriptVariable & str;
 };
 
 

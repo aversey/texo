@@ -2,13 +2,13 @@
 #define TEXO_INCLUDED_HTML
 
 #include "exporter.hpp"
-#include "producer.hpp"
 #include "importer.hpp"
+#include "producer.hpp"
 
 
 class TexoProducerHTML: public TexoProducerStrict {
 public:
-    TexoProducerHTML(TexoExporter &exporter);
+    TexoProducerHTML(TexoExporter & exporter);
 
 protected:
     bool TruePut(char c);
@@ -35,14 +35,11 @@ protected:
     bool CloseStrike();
     bool CloseUnderline();
 
-    bool StartLink(const ScriptVariable &link, const ScriptVariable &title);
-    bool CloseLink(const ScriptVariable &link, const ScriptVariable &title);
+    bool StartLink(const ScriptVariable & link, const ScriptVariable & title);
+    bool CloseLink(const ScriptVariable & link, const ScriptVariable & title);
 
-    bool TruePutImage(
-        const ScriptVariable &src,
-        const ScriptVariable &alt,
-        const ScriptVariable &title
-    );
+    bool TruePutImage(const ScriptVariable & src, const ScriptVariable & alt,
+        const ScriptVariable & title);
     bool TruePutHorizontalRule();
 };
 

@@ -2,8 +2,8 @@
 #define TEXO_INCLUDED_PLAIN
 
 #include "exporter.hpp"
-#include "producer.hpp"
 #include "importer.hpp"
+#include "producer.hpp"
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -11,7 +11,7 @@
  */
 class TexoProducerPlain: public TexoProducer {
 public:
-    TexoProducerPlain(TexoExporter &exporter);
+    TexoProducerPlain(TexoExporter & exporter);
 
     bool End();
 
@@ -34,7 +34,7 @@ private:
  */
 class TexoImporterPlain: public TexoImporter {
 public:
-    TexoImporterPlain(TexoProducer &producer);
+    TexoImporterPlain(TexoProducer & producer);
 
 
 protected:

@@ -1,7 +1,7 @@
 #include "html.hpp"
 
 
-TexoProducerHTML::TexoProducerHTML(TexoExporter &exporter):
+TexoProducerHTML::TexoProducerHTML(TexoExporter & exporter):
     TexoProducerStrict(exporter)
 {}
 
@@ -9,10 +9,17 @@ TexoProducerHTML::TexoProducerHTML(TexoExporter &exporter):
 bool TexoProducerHTML::TruePut(char c)
 {
     switch (c) {
-    case '<': return exporter.Put("&lt;");  break;
-    case '>': return exporter.Put("&gt;");  break;
-    case '&': return exporter.Put("&amp;"); break;
-    default:  return exporter.Put(c);
+    case '<':
+        return exporter.Put("&lt;");
+        break;
+    case '>':
+        return exporter.Put("&gt;");
+        break;
+    case '&':
+        return exporter.Put("&amp;");
+        break;
+    default:
+        return exporter.Put(c);
     }
 }
 
@@ -82,22 +89,50 @@ bool TexoProducerHTML::CloseQuote()
 }
 
 
-bool TexoProducerHTML::StartBold()       { return exporter.Put("<b>"); }
-bool TexoProducerHTML::StartItalic()     { return exporter.Put("<i>"); }
-bool TexoProducerHTML::StartMono()       { return exporter.Put("<code>"); }
-bool TexoProducerHTML::StartStrike()     { return exporter.Put("<del>"); }
-bool TexoProducerHTML::StartUnderline()  { return exporter.Put("<ins>"); }
+bool TexoProducerHTML::StartBold()
+{
+    return exporter.Put("<b>");
+}
+bool TexoProducerHTML::StartItalic()
+{
+    return exporter.Put("<i>");
+}
+bool TexoProducerHTML::StartMono()
+{
+    return exporter.Put("<code>");
+}
+bool TexoProducerHTML::StartStrike()
+{
+    return exporter.Put("<del>");
+}
+bool TexoProducerHTML::StartUnderline()
+{
+    return exporter.Put("<ins>");
+}
 
-bool TexoProducerHTML::CloseBold()       { return exporter.Put("</b>"); }
-bool TexoProducerHTML::CloseItalic()     { return exporter.Put("</i>"); }
-bool TexoProducerHTML::CloseMono()       { return exporter.Put("</code>"); }
-bool TexoProducerHTML::CloseStrike()     { return exporter.Put("</del>"); }
-bool TexoProducerHTML::CloseUnderline()  { return exporter.Put("</ins>"); }
+bool TexoProducerHTML::CloseBold()
+{
+    return exporter.Put("</b>");
+}
+bool TexoProducerHTML::CloseItalic()
+{
+    return exporter.Put("</i>");
+}
+bool TexoProducerHTML::CloseMono()
+{
+    return exporter.Put("</code>");
+}
+bool TexoProducerHTML::CloseStrike()
+{
+    return exporter.Put("</del>");
+}
+bool TexoProducerHTML::CloseUnderline()
+{
+    return exporter.Put("</ins>");
+}
 
 bool TexoProducerHTML::StartLink(
-    const ScriptVariable &link,
-    const ScriptVariable &title
-)
+    const ScriptVariable & link, const ScriptVariable & title)
 {
     bool ok = true;
     if (link != "") {
@@ -113,9 +148,7 @@ bool TexoProducerHTML::StartLink(
 }
 
 bool TexoProducerHTML::CloseLink(
-    const ScriptVariable &link,
-    const ScriptVariable &title
-)
+    const ScriptVariable & link, const ScriptVariable & title)
 {
     if (link != "") {
         return exporter.Put("</a>");
@@ -125,11 +158,8 @@ bool TexoProducerHTML::CloseLink(
 }
 
 
-bool TexoProducerHTML::TruePutImage(
-    const ScriptVariable &src,
-    const ScriptVariable &alt,
-    const ScriptVariable &title
-)
+bool TexoProducerHTML::TruePutImage(const ScriptVariable & src,
+    const ScriptVariable & alt, const ScriptVariable & title)
 {
     bool ok = true;
     if (src != "") {

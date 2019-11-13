@@ -4,7 +4,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo File Exporter
  */
-TexoExporterFile::TexoExporterFile(FILE *file): file(file)
+TexoExporterFile::TexoExporterFile(FILE * file): file(file)
 {}
 
 
@@ -14,7 +14,7 @@ bool TexoExporterFile::Put(char c)
     return !ferror(file);
 }
 
-bool TexoExporterFile::Put(const ScriptVariable &str)
+bool TexoExporterFile::Put(const ScriptVariable & str)
 {
     fwrite(str.c_str(), 1, str.Length(), file);
     return !ferror(file);

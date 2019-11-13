@@ -4,11 +4,14 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Importer
  */
-TexoImporter::TexoImporter(TexoProducer &producer):
+TexoImporter::TexoImporter(TexoProducer & producer):
     producer(producer), ok(true)
 {}
 
-TexoImporter::~TexoImporter()  { End(); }
+TexoImporter::~TexoImporter()
+{
+    End();
+}
 
 
 bool TexoImporter::End()
@@ -21,12 +24,12 @@ bool TexoImporter::Put(char c)
     return ok = ok && TruePut(c);
 }
 
-bool TexoImporter::Put(const ScriptVariable &s)
+bool TexoImporter::Put(const ScriptVariable & s)
 {
     return ok = ok && TruePut(s);
 }
 
-bool TexoImporter::Put(FILE *f)
+bool TexoImporter::Put(FILE * f)
 {
     return ok = ok && TruePut(f);
 }
@@ -38,7 +41,7 @@ bool TexoImporter::TrueEnd()
 }
 
 
-bool TexoImporter::TruePut(const ScriptVariable &str)
+bool TexoImporter::TruePut(const ScriptVariable & str)
 {
     const int len = str.Length();
     for (int i = 0; ok && i < len; ++i) {
@@ -47,7 +50,7 @@ bool TexoImporter::TruePut(const ScriptVariable &str)
     return ok;
 }
 
-bool TexoImporter::TruePut(FILE *file)
+bool TexoImporter::TruePut(FILE * file)
 {
     if (file) {
         for (int c = fgetc(file); ok && c != EOF; c = fgetc(file)) {

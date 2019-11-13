@@ -2,8 +2,8 @@
 #define TEXO_INCLUDED_LINES
 
 #include "exporter.hpp"
-#include "producer.hpp"
 #include "importer.hpp"
+#include "producer.hpp"
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -11,7 +11,7 @@
  */
 class TexoProducerLines: public TexoProducer {
 public:
-    TexoProducerLines(TexoExporter &exporter);
+    TexoProducerLines(TexoExporter & exporter);
 
 
     bool End();
@@ -34,7 +34,7 @@ private:
  */
 class TexoImporterLines: public TexoImporter {
 public:
-    TexoImporterLines(TexoProducer &producer);
+    TexoImporterLines(TexoProducer & producer);
 
 
 protected:

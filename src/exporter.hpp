@@ -11,7 +11,7 @@
 class TexoExporter {
 public:
     virtual bool Put(char c) = 0;
-    virtual bool Put(const ScriptVariable &str);
+    virtual bool Put(const ScriptVariable & str);
 };
 
 

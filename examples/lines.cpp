@@ -1,18 +1,18 @@
-#include <stdio.h>
+#include <file.hpp>
 #include <html.hpp>
-#include <plain.hpp>
 #include <lines.hpp>
 #include <markdown.hpp>
-#include <file.hpp>
+#include <plain.hpp>
+#include <stdio.h>
 
 
 void plain()
 {
     fputs("  ----  Lines to Plain  ----\n", stdout);
-    TexoExporterFile exporter(stdout);
+    TexoExporterFile  exporter(stdout);
     TexoProducerPlain producer(exporter);
     TexoImporterLines importer(producer);
-    FILE *file = fopen("lines.txt", "r");
+    FILE *            file = fopen("lines.txt", "r");
     importer.Put(file);
     importer.End();
     fclose(file);
@@ -21,10 +21,10 @@ void plain()
 void html()
 {
     fputs("\n  ----  Lines to HTML  ----\n", stdout);
-    TexoExporterFile exporter(stdout);
-    TexoProducerHTML producer(exporter);
+    TexoExporterFile  exporter(stdout);
+    TexoProducerHTML  producer(exporter);
     TexoImporterLines importer(producer);
-    FILE *file = fopen("lines.txt", "r");
+    FILE *            file = fopen("lines.txt", "r");
     importer.Put(file);
     importer.End();
     fclose(file);
@@ -33,10 +33,10 @@ void html()
 void markdown()
 {
     fputs("\n  ----  Lines to Markdown  ----\n", stdout);
-    TexoExporterFile exporter(stdout);
+    TexoExporterFile     exporter(stdout);
     TexoProducerMarkdown producer(exporter);
-    TexoImporterLines importer(producer);
-    FILE *file = fopen("lines.txt", "r");
+    TexoImporterLines    importer(producer);
+    FILE *               file = fopen("lines.txt", "r");
     importer.Put(file);
     importer.End();
     fclose(file);
@@ -45,10 +45,10 @@ void markdown()
 void lines()
 {
     fputs("\n  ----  Lines to Lines  ----\n", stdout);
-    TexoExporterFile exporter(stdout);
+    TexoExporterFile  exporter(stdout);
     TexoProducerLines producer(exporter);
     TexoImporterLines importer(producer);
-    FILE *file = fopen("lines.txt", "r");
+    FILE *            file = fopen("lines.txt", "r");
     importer.Put(file);
     importer.End();
     fclose(file);

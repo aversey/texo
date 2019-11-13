@@ -4,7 +4,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Lines Producer
  */
-TexoProducerLines::TexoProducerLines(TexoExporter &exporter):
+TexoProducerLines::TexoProducerLines(TexoExporter & exporter):
     TexoProducer(exporter), newline(true)
 {}
 
@@ -57,7 +57,7 @@ bool TexoProducerLines::Quote()
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Lines Importer
  */
-TexoImporterLines::TexoImporterLines(TexoProducer &producer):
+TexoImporterLines::TexoImporterLines(TexoProducer & producer):
     TexoImporter(producer), newline(true), quote(false)
 {}
 

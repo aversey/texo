@@ -11,15 +11,15 @@
  */
 class TexoExporterFile: public TexoExporter {
 public:
-    TexoExporterFile(FILE *file);
+    TexoExporterFile(FILE * file);
 
 
     bool Put(char c);
-    bool Put(const ScriptVariable &str);
+    bool Put(const ScriptVariable & str);
 
 
 private:
-    FILE *file;
+    FILE * file;
 };
 
 

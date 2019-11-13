@@ -10,7 +10,7 @@
  */
 class TexoProducer {
 public:
-    TexoProducer(TexoExporter &exporter);  // Setup exporter used for output.
+    TexoProducer(TexoExporter & exporter);  // Setup exporter used for output.
 
 
     virtual bool End();  // Notify producer, what input is ended.
@@ -37,22 +37,17 @@ public:
 
     // Switch link to given or switch it off, if no one is given.
     virtual bool Link(
-        const ScriptVariable &link,
-        const ScriptVariable &title
-    );
+        const ScriptVariable & link, const ScriptVariable & title);
     virtual bool Link();
 
 
-    virtual bool PutImage(
-        const ScriptVariable &src,
-        const ScriptVariable &alt,
-        const ScriptVariable &title
-    );
+    virtual bool PutImage(const ScriptVariable & src,
+        const ScriptVariable & alt, const ScriptVariable & title);
     virtual bool PutHorizontalRule();
 
 
 protected:
-    TexoExporter &exporter;
+    TexoExporter & exporter;
 };
 
 
@@ -64,7 +59,7 @@ protected:
  */
 class TexoProducerStrict: public TexoProducer {
 public:
-    TexoProducerStrict(TexoExporter &exporter);
+    TexoProducerStrict(TexoExporter & exporter);
 
 
     bool End();
@@ -85,14 +80,11 @@ public:
     bool Strike();
     bool Underline();
 
-    bool Link(const ScriptVariable &path, const ScriptVariable &title);
+    bool Link(const ScriptVariable & path, const ScriptVariable & title);
     bool Link();
 
-    bool PutImage(
-        const ScriptVariable &src,
-        const ScriptVariable &alt,
-        const ScriptVariable &title
-    );
+    bool PutImage(const ScriptVariable & src, const ScriptVariable & alt,
+        const ScriptVariable & title);
     bool PutHorizontalRule();
 
 
@@ -123,47 +115,30 @@ protected:
     virtual bool CloseUnderline() = 0;
 
     virtual bool StartLink(
-        const ScriptVariable &link,
-        const ScriptVariable &title
-    ) = 0;
+        const ScriptVariable & link, const ScriptVariable & title)
+        = 0;
     virtual bool CloseLink(
-        const ScriptVariable &link,
-        const ScriptVariable &title
-    ) = 0;
+        const ScriptVariable & link, const ScriptVariable & title)
+        = 0;
 
 
-    virtual bool TruePutImage(
-        const ScriptVariable &src,
-        const ScriptVariable &alt,
-        const ScriptVariable &title
-    ) = 0;
+    virtual bool TruePutImage(const ScriptVariable & src,
+        const ScriptVariable & alt, const ScriptVariable & title)
+        = 0;
     virtual bool TruePutHorizontalRule() = 0;
 
 
 private:
-    enum Block {
-        block_none = 0,
-        code,
-        header,
-        paragraph,
-        quote
-    } block;
+    enum Block { block_none = 0, code, header, paragraph, quote } block;
 
     int header_level;
 
 
-    enum Mod {
-        bold,
-        italic,
-        link,
-        mono,
-        strike,
-        underline
-    } mods[6];
+    enum Mod { bold, italic, link, mono, strike, underline } mods[6];
     int opened;
 
-    const ScriptVariable *link_link;
-    const ScriptVariable *link_title;
+    const ScriptVariable * link_link;
+    const ScriptVariable * link_title;
 
 
     bool Start();  // Open paragraph if no block is opened.
@@ -178,7 +153,7 @@ private:
 
     // Close all opened mods sequentially, down to (including) last,
     // returning count of closed mods, or negative number in case of error.
-    int  CloseMods(Mod last);
+    int CloseMods(Mod last);
 
     // Close all opened mods.
     bool CloseMods();
