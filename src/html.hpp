@@ -38,8 +38,9 @@ protected:
     bool StartLink(const ScriptVariable & link, const ScriptVariable & title);
     bool CloseLink(const ScriptVariable & link, const ScriptVariable & title);
 
-    bool TruePutImage(const ScriptVariable & src, const ScriptVariable & alt,
-        const ScriptVariable & title);
+    bool TruePutImage(const ScriptVariable & src,
+                      const ScriptVariable & alt,
+                      const ScriptVariable & title);
     bool TruePutHorizontalRule();
 };
 

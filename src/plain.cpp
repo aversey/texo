@@ -70,9 +70,8 @@ bool TexoProducerPlain::PutHorizontalRule()
         ok = exporter.Put('\n');
     }
     nospace = true;
-    return ok
-        && exporter.Put(
-            "--------------------------------------------------\n");
+    return ok && exporter.Put(
+                     "--------------------------------------------------\n");
 }
 
 

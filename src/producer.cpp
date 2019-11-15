@@ -66,8 +66,8 @@ bool TexoProducer::Underline()
     return true;
 }
 
-bool TexoProducer::Link(
-    const ScriptVariable & link, const ScriptVariable & title)
+bool TexoProducer::Link(const ScriptVariable & link,
+                        const ScriptVariable & title)
 {
     return true;
 }
@@ -79,7 +79,8 @@ bool TexoProducer::Link()
 
 
 bool TexoProducer::PutImage(const ScriptVariable & src,
-    const ScriptVariable & alt, const ScriptVariable & title)
+                            const ScriptVariable & alt,
+                            const ScriptVariable & title)
 {
     return true;
 }
@@ -179,8 +180,8 @@ bool TexoProducerStrict::Underline()
     return SwitchMod(underline);
 }
 
-bool TexoProducerStrict::Link(
-    const ScriptVariable & path, const ScriptVariable & title)
+bool TexoProducerStrict::Link(const ScriptVariable & path,
+                              const ScriptVariable & title)
 {
     if (IsOpened(link)) {
         int closed = CloseMods(link);
@@ -210,7 +211,8 @@ bool TexoProducerStrict::Link()
 }
 
 bool TexoProducerStrict::PutImage(const ScriptVariable & src,
-    const ScriptVariable & alt, const ScriptVariable & title)
+                                  const ScriptVariable & alt,
+                                  const ScriptVariable & title)
 {
     return Start() && TruePutImage(src, alt, title);
 }

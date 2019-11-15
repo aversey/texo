@@ -28,8 +28,9 @@ public:
     bool Link(const ScriptVariable & link, const ScriptVariable & title);
     bool Link();
 
-    bool PutImage(const ScriptVariable & src, const ScriptVariable & alt,
-        const ScriptVariable & title);
+    bool PutImage(const ScriptVariable & src,
+                  const ScriptVariable & alt,
+                  const ScriptVariable & title);
     bool PutHorizontalRule();
 
 private:

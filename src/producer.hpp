@@ -36,13 +36,14 @@ public:
     virtual bool Underline();
 
     // Switch link to given or switch it off, if no one is given.
-    virtual bool Link(
-        const ScriptVariable & link, const ScriptVariable & title);
+    virtual bool Link(const ScriptVariable & link,
+                      const ScriptVariable & title);
     virtual bool Link();
 
 
     virtual bool PutImage(const ScriptVariable & src,
-        const ScriptVariable & alt, const ScriptVariable & title);
+                          const ScriptVariable & alt,
+                          const ScriptVariable & title);
     virtual bool PutHorizontalRule();
 
 
@@ -83,8 +84,9 @@ public:
     bool Link(const ScriptVariable & path, const ScriptVariable & title);
     bool Link();
 
-    bool PutImage(const ScriptVariable & src, const ScriptVariable & alt,
-        const ScriptVariable & title);
+    bool PutImage(const ScriptVariable & src,
+                  const ScriptVariable & alt,
+                  const ScriptVariable & title);
     bool PutHorizontalRule();
 
 
@@ -114,18 +116,16 @@ protected:
     virtual bool CloseStrike()    = 0;
     virtual bool CloseUnderline() = 0;
 
-    virtual bool StartLink(
-        const ScriptVariable & link, const ScriptVariable & title)
-        = 0;
-    virtual bool CloseLink(
-        const ScriptVariable & link, const ScriptVariable & title)
-        = 0;
+    virtual bool StartLink(const ScriptVariable & link,
+                           const ScriptVariable & title) = 0;
+    virtual bool CloseLink(const ScriptVariable & link,
+                           const ScriptVariable & title) = 0;
 
 
     virtual bool TruePutImage(const ScriptVariable & src,
-        const ScriptVariable & alt, const ScriptVariable & title)
-        = 0;
-    virtual bool TruePutHorizontalRule() = 0;
+                              const ScriptVariable & alt,
+                              const ScriptVariable & title) = 0;
+    virtual bool TruePutHorizontalRule()                    = 0;
 
 
 private:

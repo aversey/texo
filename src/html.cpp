@@ -131,8 +131,8 @@ bool TexoProducerHTML::CloseUnderline()
     return exporter.Put("</ins>");
 }
 
-bool TexoProducerHTML::StartLink(
-    const ScriptVariable & link, const ScriptVariable & title)
+bool TexoProducerHTML::StartLink(const ScriptVariable & link,
+                                 const ScriptVariable & title)
 {
     bool ok = true;
     if (link != "") {
@@ -147,8 +147,8 @@ bool TexoProducerHTML::StartLink(
     return ok;
 }
 
-bool TexoProducerHTML::CloseLink(
-    const ScriptVariable & link, const ScriptVariable & title)
+bool TexoProducerHTML::CloseLink(const ScriptVariable & link,
+                                 const ScriptVariable & title)
 {
     if (link != "") {
         return exporter.Put("</a>");
@@ -159,7 +159,8 @@ bool TexoProducerHTML::CloseLink(
 
 
 bool TexoProducerHTML::TruePutImage(const ScriptVariable & src,
-    const ScriptVariable & alt, const ScriptVariable & title)
+                                    const ScriptVariable & alt,
+                                    const ScriptVariable & title)
 {
     bool ok = true;
     if (src != "") {

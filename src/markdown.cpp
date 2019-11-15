@@ -104,8 +104,8 @@ bool TexoProducerMarkdown::Strike()
     return Mod("~~");
 }
 
-bool TexoProducerMarkdown::Link(
-    const ScriptVariable & link, const ScriptVariable & title)
+bool TexoProducerMarkdown::Link(const ScriptVariable & link,
+                                const ScriptVariable & title)
 {
     bool ok = Link();
     if (link != "") {
@@ -134,7 +134,8 @@ bool TexoProducerMarkdown::Link()
 
 
 bool TexoProducerMarkdown::PutImage(const ScriptVariable & src,
-    const ScriptVariable & alt, const ScriptVariable & title)
+                                    const ScriptVariable & alt,
+                                    const ScriptVariable & title)
 {
     bool ok = true;
     if (src != "") {
@@ -161,9 +162,8 @@ bool TexoProducerMarkdown::PutHorizontalRule()
         ok = ok && exporter.Put('\n');
     }
     nospace = true;
-    return ok
-        && exporter.Put(
-            "--------------------------------------------------\n");
+    return ok && exporter.Put(
+                     "--------------------------------------------------\n");
 }
 
 
