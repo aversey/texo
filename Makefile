@@ -1,10 +1,10 @@
 # Debug mode:
-DEBUG   = yes
+# DEBUG     = yes
 
 CC        = g++
 LIB       = libtexo.a
 
-CPPFLAGS  = -Wall -ansi
+CPPFLAGS  = -Wall -ansi -pedantic
 ifeq '$(DEBUG)' 'yes'
 CPPFLAGS += -g -O0
 else
@@ -14,8 +14,6 @@ endif
 SRC_DIR   = src
 SRC       = $(wildcard $(SRC_DIR)/*.cpp)
 OBJ       = $(SRC:.cpp=.o)
-
-INCLUDE   = -I../lib/scriptpp
 
 
 default: $(LIB)
@@ -28,7 +26,7 @@ deps.mk: $(SRC)
 	$(CC) -MM $^ > $@
 
 %.o: %.cpp %.hpp
-	$(CC) $(CPPFLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(CPPFLAGS) -c $< -o $@
 
 $(LIB): $(OBJ)
 	ar rcs $@ $^
