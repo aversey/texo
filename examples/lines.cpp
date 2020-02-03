@@ -9,10 +9,10 @@
 void plain()
 {
     fputs("  ----  Lines to Plain  ----\n", stdout);
-    TexoExporterFile  exporter(stdout);
+    TexoFile          exporter(stdout);
     TexoProducerPlain producer(exporter);
     TexoImporterLines importer(producer);
-    FILE *            file = fopen("lines.txt", "r");
+    FILE             *file = fopen("lines.txt", "r");
     importer.Put(file);
     importer.End();
     fclose(file);
@@ -21,10 +21,10 @@ void plain()
 void html()
 {
     fputs("\n  ----  Lines to HTML  ----\n", stdout);
-    TexoExporterFile  exporter(stdout);
+    TexoFile          exporter(stdout);
     TexoProducerHTML  producer(exporter);
     TexoImporterLines importer(producer);
-    FILE *            file = fopen("lines.txt", "r");
+    FILE             *file = fopen("lines.txt", "r");
     importer.Put(file);
     importer.End();
     fclose(file);
@@ -33,10 +33,10 @@ void html()
 void markdown()
 {
     fputs("\n  ----  Lines to Markdown  ----\n", stdout);
-    TexoExporterFile     exporter(stdout);
+    TexoFile             exporter(stdout);
     TexoProducerMarkdown producer(exporter);
     TexoImporterLines    importer(producer);
-    FILE *               file = fopen("lines.txt", "r");
+    FILE                *file = fopen("lines.txt", "r");
     importer.Put(file);
     importer.End();
     fclose(file);
@@ -45,14 +45,15 @@ void markdown()
 void lines()
 {
     fputs("\n  ----  Lines to Lines  ----\n", stdout);
-    TexoExporterFile  exporter(stdout);
+    TexoFile          exporter(stdout);
     TexoProducerLines producer(exporter);
     TexoImporterLines importer(producer);
-    FILE *            file = fopen("lines.txt", "r");
+    FILE             *file = fopen("lines.txt", "r");
     importer.Put(file);
     importer.End();
     fclose(file);
 }
+
 
 int main()
 {

@@ -11,7 +11,7 @@
  */
 class TexoProducerPlain: public TexoProducer {
 public:
-    TexoProducerPlain(TexoExporter & exporter);
+    TexoProducerPlain(TexoExporter &exporter);
 
     bool End();
 
@@ -34,7 +34,7 @@ private:
  */
 class TexoImporterPlain: public TexoImporter {
 public:
-    TexoImporterPlain(TexoProducer & producer);
+    TexoImporterPlain(TexoProducer &producer);
 
 
 protected:
@@ -56,14 +56,14 @@ private:
         paragraph_rule
     } state;
 
-    void Text(char c);
-    void Newline(char c);
-    void Paragraph(char c);
-    void QuotePre(char c);
-    void Quote(char c);
-    void QuoteNewline(char c);
-    void Rule(char c);
-    void ParagraphRule(char c);
+    bool Text(char c);
+    bool Newline(char c);
+    bool Paragraph(char c);
+    bool QuotePre(char c);
+    bool Quote(char c);
+    bool QuoteNewline(char c);
+    bool Rule(char c);
+    bool ParagraphRule(char c);
 
     int dash_count;
 };

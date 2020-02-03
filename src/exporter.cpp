@@ -1,15 +1,17 @@
 #include "exporter.hpp"
 
+#include <string.h>
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Exporter
  */
-bool TexoExporter::Put(const ScriptVariable & str)
+bool TexoExporter::Put(const char *str)
 {
-    bool      ok  = true;
-    const int len = str.Length();
-    for (int i = 0; ok && i < len; ++i) {
-        ok = Put(str[i]);
+    bool ok = true;
+    while (ok && *str) {
+        ok = Put(*str);
+        ++str;
     }
     return ok;
 }

@@ -9,17 +9,17 @@
  * Texo File Exporter
  * Simple utility class to make output into FILE *variable.
  */
-class TexoExporterFile: public TexoExporter {
+class TexoFile: public TexoExporter {
 public:
-    TexoExporterFile(FILE * file);
+    TexoFile(FILE *file);
 
 
     bool Put(char c);
-    bool Put(const ScriptVariable & str);
+    bool Put(const char *str);
 
 
 private:
-    FILE * file;
+    FILE *file;
 };
 
 

@@ -3,22 +3,24 @@
 
 #include "exporter.hpp"
 
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo String Exporter
- * Simple utility class to make output into Script Variable,
- * which can be easily transformed into C string via c_str method.
+ * Simple utility class to make output into C string.
  */
-class TexoExporterString: public TexoExporter {
+class TexoString: public TexoExporter {
 public:
-    TexoExporterString(ScriptVariable & str);
+    TexoString(char *&str);
 
 
     bool Put(char c);
-    bool Put(const ScriptVariable & addon);
+    bool Put(const char *addon);
 
 
 private:
-    ScriptVariable & str;
+    char *&str;
+    int    len;
+    int    size;
 };
 
 

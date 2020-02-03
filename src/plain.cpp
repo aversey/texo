@@ -4,7 +4,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Plain Producer
  */
-TexoProducerPlain::TexoProducerPlain(TexoExporter & exporter):
+TexoProducerPlain::TexoProducerPlain(TexoExporter &exporter):
     TexoProducer(exporter), quoted(false), newline(false), nospace(true)
 {}
 
@@ -70,15 +70,14 @@ bool TexoProducerPlain::PutHorizontalRule()
         ok = exporter.Put('\n');
     }
     nospace = true;
-    return ok && exporter.Put(
-                     "--------------------------------------------------\n");
+    return ok && exporter.Put("------------------------------------------\n");
 }
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Plain Importer
  */
-TexoImporterPlain::TexoImporterPlain(TexoProducer & producer):
+TexoImporterPlain::TexoImporterPlain(TexoProducer &producer):
     TexoImporter(producer), state(text)
 {}
 
@@ -96,48 +95,30 @@ bool TexoImporterPlain::TrueEnd()
 bool TexoImporterPlain::TruePut(char c)
 {
     switch (state) {
-    case text:
-        Text(c);
-        break;
-    case newline:
-        Newline(c);
-        break;
-    case paragraph:
-        Paragraph(c);
-        break;
-    case quote_pre:
-        QuotePre(c);
-        break;
-    case quote:
-        Quote(c);
-        break;
-    case quote_newline:
-        QuoteNewline(c);
-        break;
-    case rule:
-        Rule(c);
-        break;
-    case paragraph_rule:
-        ParagraphRule(c);
-        break;
+    case text:           return Text(c);
+    case newline:        return Newline(c);
+    case paragraph:      return Paragraph(c);
+    case quote_pre:      return QuotePre(c);
+    case quote:          return Quote(c);
+    case quote_newline:  return QuoteNewline(c);
+    case rule:           return Rule(c);
+    case paragraph_rule: return ParagraphRule(c);
+    }
+    return ok;  // Impossible
+}
+
+
+bool TexoImporterPlain::Text(char c)
+{
+    if (c == '\n') {
+        state = newline;
+    } else {
+        ok = producer.Put(c);
     }
     return ok;
 }
 
-
-void TexoImporterPlain::Text(char c)
-{
-    switch (c) {
-    case '\n':
-        state = newline;
-        break;
-    default:
-        ok = producer.Put(c);
-        break;
-    }
-}
-
-void TexoImporterPlain::Newline(char c)
+bool TexoImporterPlain::Newline(char c)
 {
     if (c == '\n') {
         state = paragraph;
@@ -151,9 +132,10 @@ void TexoImporterPlain::Newline(char c)
             Text(c);
         }
     }
+    return ok;
 }
 
-void TexoImporterPlain::Paragraph(char c)
+bool TexoImporterPlain::Paragraph(char c)
 {
     if (c == '>') {
         ok    = producer.Quote();
@@ -168,29 +150,29 @@ void TexoImporterPlain::Paragraph(char c)
             Text(c);
         }
     }
+    return ok;
 }
 
-void TexoImporterPlain::QuotePre(char c)
+bool TexoImporterPlain::QuotePre(char c)
 {
     if (c != ' ') {
         state = quote;
         Quote(c);
     }
+    return ok;
 }
 
-void TexoImporterPlain::Quote(char c)
+bool TexoImporterPlain::Quote(char c)
 {
-    switch (c) {
-    case '\n':
+    if (c == '\n') {
         state = quote_newline;
-        break;
-    default:
+    } else {
         ok = producer.Put(c);
-        break;
     }
+    return ok;
 }
 
-void TexoImporterPlain::QuoteNewline(char c)
+bool TexoImporterPlain::QuoteNewline(char c)
 {
     if (c == '>') {
         ok    = producer.Put('\n');
@@ -207,9 +189,10 @@ void TexoImporterPlain::QuoteNewline(char c)
             Text(c);
         }
     }
+    return ok;
 }
 
-void TexoImporterPlain::Rule(char c)
+bool TexoImporterPlain::Rule(char c)
 {
     if (c == '\n') {
         ok    = producer.PutHorizontalRule();
@@ -226,14 +209,13 @@ void TexoImporterPlain::Rule(char c)
             Text(c);
         }
     }
+    return ok;
 }
 
-void TexoImporterPlain::ParagraphRule(char c)
+bool TexoImporterPlain::ParagraphRule(char c)
 {
     if (c == '\n') {
         ok = producer.Paragraph();
     }
-    if (ok) {
-        Rule(c);
-    }
+    return ok && Rule(c);
 }

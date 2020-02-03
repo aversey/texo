@@ -1,21 +1,23 @@
 #include "file.hpp"
 
+#include <string.h>
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo File Exporter
  */
-TexoExporterFile::TexoExporterFile(FILE * file): file(file)
+TexoFile::TexoFile(FILE *file): file(file)
 {}
 
 
-bool TexoExporterFile::Put(char c)
+bool TexoFile::Put(char c)
 {
     fputc(c, file);
     return !ferror(file);
 }
 
-bool TexoExporterFile::Put(const ScriptVariable & str)
+bool TexoFile::Put(const char *str)
 {
-    fwrite(str.c_str(), 1, str.Length(), file);
+    fwrite(str, 1, strlen(str), file);
     return !ferror(file);
 }

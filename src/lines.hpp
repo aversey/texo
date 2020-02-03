@@ -11,7 +11,7 @@
  */
 class TexoProducerLines: public TexoProducer {
 public:
-    TexoProducerLines(TexoExporter & exporter);
+    TexoProducerLines(TexoExporter &exporter);
 
 
     bool End();
@@ -34,7 +34,7 @@ private:
  */
 class TexoImporterLines: public TexoImporter {
 public:
-    TexoImporterLines(TexoProducer & producer);
+    TexoImporterLines(TexoProducer &producer);
 
 
 protected:

@@ -10,7 +10,7 @@
  */
 class TexoProducer {
 public:
-    TexoProducer(TexoExporter & exporter);  // Setup exporter used for output.
+    TexoProducer(TexoExporter &exporter);  // Setup exporter used for output.
 
 
     virtual bool End();  // Notify producer, what input is ended.
@@ -21,8 +21,8 @@ public:
 
     // Block Signal Handlers
     // Only one can be opened at one moment.
-    virtual bool Code();
     virtual bool Header(int level);
+    virtual bool Code();
     virtual bool Paragraph() = 0;
     virtual bool Quote();
 
@@ -36,19 +36,16 @@ public:
     virtual bool Underline();
 
     // Switch link to given or switch it off, if no one is given.
-    virtual bool Link(const ScriptVariable & link,
-                      const ScriptVariable & title);
+    virtual bool Link(const char *link, const char *title);
     virtual bool Link();
 
 
-    virtual bool PutImage(const ScriptVariable & src,
-                          const ScriptVariable & alt,
-                          const ScriptVariable & title);
+    virtual bool PutImage(const char *src, const char *alt, const char *title);
     virtual bool PutHorizontalRule();
 
 
 protected:
-    TexoExporter & exporter;
+    TexoExporter &exporter;
 };
 
 
@@ -69,8 +66,8 @@ public:
     bool Put(char c);
 
 
-    bool Code();
     bool Header(int level);
+    bool Code();
     bool Paragraph();
     bool Quote();
 
@@ -81,51 +78,55 @@ public:
     bool Strike();
     bool Underline();
 
-    bool Link(const ScriptVariable & path, const ScriptVariable & title);
+    bool Link(const char *path, const char *title);
     bool Link();
 
-    bool PutImage(const ScriptVariable & src,
-                  const ScriptVariable & alt,
-                  const ScriptVariable & title);
+    bool PutImage(const char *src, const char *alt, const char *title);
+
     bool PutHorizontalRule();
 
 
 protected:
     virtual bool TruePut(char c) = 0;
 
-    virtual bool StartCode()            = 0;
-    virtual bool StartHeader(int level) = 0;
-    virtual bool StartParagraph()       = 0;
-    virtual bool StartQuote()           = 0;
 
-    virtual bool CloseCode()            = 0;
+    virtual bool StartHeader(int level) = 0;
     virtual bool CloseHeader(int level) = 0;
+
+    virtual bool StartCode()            = 0;
+    virtual bool CloseCode()            = 0;
+
+    virtual bool StartParagraph()       = 0;
     virtual bool CloseParagraph()       = 0;
+
+    virtual bool StartQuote()           = 0;
     virtual bool CloseQuote()           = 0;
 
 
     virtual bool StartBold()      = 0;
-    virtual bool StartItalic()    = 0;
-    virtual bool StartMono()      = 0;
-    virtual bool StartStrike()    = 0;
-    virtual bool StartUnderline() = 0;
-
     virtual bool CloseBold()      = 0;
+
+    virtual bool StartItalic()    = 0;
     virtual bool CloseItalic()    = 0;
+
+    virtual bool StartMono()      = 0;
     virtual bool CloseMono()      = 0;
+
+    virtual bool StartStrike()    = 0;
     virtual bool CloseStrike()    = 0;
+
+    virtual bool StartUnderline() = 0;
     virtual bool CloseUnderline() = 0;
 
-    virtual bool StartLink(const ScriptVariable & link,
-                           const ScriptVariable & title) = 0;
-    virtual bool CloseLink(const ScriptVariable & link,
-                           const ScriptVariable & title) = 0;
+    virtual bool StartLink(const char *link, const char *title) = 0;
+    virtual bool CloseLink(const char *link, const char *title) = 0;
 
 
-    virtual bool TruePutImage(const ScriptVariable & src,
-                              const ScriptVariable & alt,
-                              const ScriptVariable & title) = 0;
-    virtual bool TruePutHorizontalRule()                    = 0;
+    virtual bool TruePutImage(const char *src,
+                              const char *alt,
+                              const char *title) = 0;
+
+    virtual bool TruePutHorizontalRule() = 0;
 
 
 private:
@@ -137,8 +138,8 @@ private:
     enum Mod { bold, italic, link, mono, strike, underline } mods[6];
     int opened;
 
-    const ScriptVariable * link_link;
-    const ScriptVariable * link_title;
+    const char **link_link;
+    const char **link_title;
 
 
     bool Start();  // Open paragraph if no block is opened.

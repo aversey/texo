@@ -4,7 +4,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Importer
  */
-TexoImporter::TexoImporter(TexoProducer & producer):
+TexoImporter::TexoImporter(TexoProducer &producer):
     producer(producer), ok(true)
 {}
 
@@ -24,12 +24,12 @@ bool TexoImporter::Put(char c)
     return ok = ok && TruePut(c);
 }
 
-bool TexoImporter::Put(const ScriptVariable & s)
+bool TexoImporter::Put(const char *s)
 {
     return ok = ok && TruePut(s);
 }
 
-bool TexoImporter::Put(FILE * f)
+bool TexoImporter::Put(FILE *f)
 {
     return ok = ok && TruePut(f);
 }
@@ -40,17 +40,16 @@ bool TexoImporter::TrueEnd()
     return producer.End();
 }
 
-
-bool TexoImporter::TruePut(const ScriptVariable & str)
+bool TexoImporter::TruePut(const char *str)
 {
-    const int len = str.Length();
-    for (int i = 0; ok && i < len; ++i) {
-        ok = TruePut(str[i]);
+    while (*str) {
+        ok = TruePut(*str);
+        ++str;
     }
     return ok;
 }
 
-bool TexoImporter::TruePut(FILE * file)
+bool TexoImporter::TruePut(FILE *file)
 {
     if (file) {
         for (int c = fgetc(file); ok && c != EOF; c = fgetc(file)) {

@@ -12,27 +12,27 @@
  */
 class TexoImporter {
 public:
-    TexoImporter(TexoProducer & producer);
+    TexoImporter(TexoProducer &producer);
     ~TexoImporter();
 
 
     bool End();
+
     bool Put(char c);
-    bool Put(const ScriptVariable & s);
-    bool Put(FILE * f);
+    bool Put(const char *s);
+    bool Put(FILE *f);
 
 
 protected:
     virtual bool TrueEnd();
 
-
     virtual bool TruePut(char c) = 0;
-    virtual bool TruePut(const ScriptVariable & str);
-    virtual bool TruePut(FILE * file);
+    virtual bool TruePut(const char *str);
+    virtual bool TruePut(FILE *file);
 
 
-    TexoProducer & producer;
-    bool           ok;
+    TexoProducer &producer;
+    bool          ok;
 };
 
 

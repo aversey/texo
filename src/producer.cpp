@@ -4,7 +4,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Producer
  */
-TexoProducer::TexoProducer(TexoExporter & exporter): exporter(exporter)
+TexoProducer::TexoProducer(TexoExporter &exporter): exporter(exporter)
 {}  // Just save exporter for future use.
 
 
@@ -23,64 +23,26 @@ bool TexoProducer::Put(char c)
 // Block Signal Handlers
 // By default, nothing has to be done, and no error produced,
 // except for paragraphs, which must be implemented.
-bool TexoProducer::Code()
-{
-    return true;
-}
-
-bool TexoProducer::Header(int level)
-{
-    return true;
-}
-
-bool TexoProducer::Quote()
-{
-    return true;
-}
+bool TexoProducer::Header(int level)  { return true; }
+bool TexoProducer::Code()             { return true; }
+bool TexoProducer::Quote()            { return true; }
 
 
 // Modificator Signal Handlers
 // By default, nothing has to be done, and no error produced.
-bool TexoProducer::Bold()
-{
-    return true;
-}
+bool TexoProducer::Bold()       { return true; }
+bool TexoProducer::Italic()     { return true; }
+bool TexoProducer::Mono()       { return true; }
+bool TexoProducer::Strike()     { return true; }
+bool TexoProducer::Underline()  { return true; }
 
-bool TexoProducer::Italic()
-{
-    return true;
-}
-
-bool TexoProducer::Mono()
-{
-    return true;
-}
-
-bool TexoProducer::Strike()
-{
-    return true;
-}
-
-bool TexoProducer::Underline()
-{
-    return true;
-}
-
-bool TexoProducer::Link(const ScriptVariable & link,
-                        const ScriptVariable & title)
-{
-    return true;
-}
-
-bool TexoProducer::Link()
-{
-    return true;
-}
+bool TexoProducer::Link(const char *link, const char *title)  { return true; }
+bool TexoProducer::Link()                                     { return true; }
 
 
-bool TexoProducer::PutImage(const ScriptVariable & src,
-                            const ScriptVariable & alt,
-                            const ScriptVariable & title)
+bool TexoProducer::PutImage(const char *src,
+                            const char *alt,
+                            const char *title)
 {
     return true;
 }
@@ -94,7 +56,7 @@ bool TexoProducer::PutHorizontalRule()
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Strict Producer
  */
-TexoProducerStrict::TexoProducerStrict(TexoExporter & exporter):
+TexoProducerStrict::TexoProducerStrict(TexoExporter &exporter):
     TexoProducer(exporter), block(block_none), opened(0)
 {}
 
@@ -113,22 +75,22 @@ bool TexoProducerStrict::Put(char c)
 }
 
 
-bool TexoProducerStrict::Code()
-{
-    if (CloseBlock()) {
-        block = code;
-        return StartCode();
-    } else {
-        return false;
-    }
-}
-
 bool TexoProducerStrict::Header(int level)
 {
     if (CloseBlock()) {
         block        = header;
         header_level = level;
         return StartHeader(level);
+    } else {
+        return false;
+    }
+}
+
+bool TexoProducerStrict::Code()
+{
+    if (CloseBlock()) {
+        block = code;
+        return StartCode();
     } else {
         return false;
     }
@@ -155,33 +117,13 @@ bool TexoProducerStrict::Quote()
 }
 
 
-bool TexoProducerStrict::Bold()
-{
-    return SwitchMod(bold);
-}
+bool TexoProducerStrict::Bold()       { return SwitchMod(bold); }
+bool TexoProducerStrict::Italic()     { return SwitchMod(italic); }
+bool TexoProducerStrict::Mono()       { return SwitchMod(mono); }
+bool TexoProducerStrict::Strike()     { return SwitchMod(strike); }
+bool TexoProducerStrict::Underline()  { return SwitchMod(underline); }
 
-bool TexoProducerStrict::Italic()
-{
-    return SwitchMod(italic);
-}
-
-bool TexoProducerStrict::Mono()
-{
-    return SwitchMod(mono);
-}
-
-bool TexoProducerStrict::Strike()
-{
-    return SwitchMod(strike);
-}
-
-bool TexoProducerStrict::Underline()
-{
-    return SwitchMod(underline);
-}
-
-bool TexoProducerStrict::Link(const ScriptVariable & path,
-                              const ScriptVariable & title)
+bool TexoProducerStrict::Link(const char *path, const char *title)
 {
     if (IsOpened(link)) {
         int closed = CloseMods(link);
@@ -210,9 +152,10 @@ bool TexoProducerStrict::Link()
     return true;
 }
 
-bool TexoProducerStrict::PutImage(const ScriptVariable & src,
-                                  const ScriptVariable & alt,
-                                  const ScriptVariable & title)
+
+bool TexoProducerStrict::PutImage(const char *src,
+                                  const char *alt,
+                                  const char *title)
 {
     return Start() && TruePutImage(src, alt, title);
 }
@@ -235,23 +178,17 @@ bool TexoProducerStrict::Start()
 
 bool TexoProducerStrict::CloseBlock()
 {
-    if (CloseMods()) {
-        switch (block) {
-        case block_none:
-            return true;
-        case code:
-            return CloseCode();
-        case header:
-            return CloseHeader(header_level);
-        case paragraph:
-            return CloseParagraph();
-        case quote:
-            return CloseQuote();
-        }
-        return true;  // Inpossible, since all cases are in switch.
-    } else {
+    if (!CloseMods()) {
         return false;
     }
+    switch (block) {
+    case block_none: return true;
+    case code:       return CloseCode();
+    case header:     return CloseHeader(header_level);
+    case paragraph:  return CloseParagraph();
+    case quote:      return CloseQuote();
+    }
+    return true;  // Impossible, since all cases are in switch.
 }
 
 bool TexoProducerStrict::SwitchMod(Mod mod)
@@ -273,39 +210,27 @@ bool TexoProducerStrict::OpenMod(Mod mod)
     mods[opened] = mod;
     ++opened;
     switch (mod) {
-    case bold:
-        return StartBold();
-    case italic:
-        return StartItalic();
-    case link:
-        return StartLink(*link_link, *link_title);
-    case mono:
-        return StartMono();
-    case strike:
-        return StartStrike();
-    case underline:
-        return StartUnderline();
+    case bold:      return StartBold();
+    case italic:    return StartItalic();
+    case link:      return StartLink(*link_link, *link_title);
+    case mono:      return StartMono();
+    case strike:    return StartStrike();
+    case underline: return StartUnderline();
     }
-    return true;  // Inpossible, since all cases are in switch.
+    return true;  // Impossible, since all cases are in switch.
 }
 
 bool TexoProducerStrict::CloseMod(Mod mod)
 {
     switch (mod) {
-    case bold:
-        return CloseBold();
-    case italic:
-        return CloseItalic();
-    case link:
-        return CloseLink(*link_link, *link_title);
-    case mono:
-        return CloseMono();
-    case strike:
-        return CloseStrike();
-    case underline:
-        return CloseUnderline();
+    case bold:      return CloseBold();
+    case italic:    return CloseItalic();
+    case link:      return CloseLink(*link_link, *link_title);
+    case mono:      return CloseMono();
+    case strike:    return CloseStrike();
+    case underline: return CloseUnderline();
     }
-    return true;  // Inpossible, since all cases are in switch.
+    return true;  // Impossible, since all cases are in switch.
 }
 
 int TexoProducerStrict::CloseMods(Mod last)
@@ -313,12 +238,11 @@ int TexoProducerStrict::CloseMods(Mod last)
     const int old = opened;
     while (opened) {
         Mod top = mods[--opened];
-        if (CloseMod(top)) {
-            if (top == last) {
-                return old - opened;
-            }
-        } else {
+        if (!CloseMod(top)) {
             return -1;
+        }
+        if (top == last) {
+            return old - opened;
         }
     }
     return old - opened;

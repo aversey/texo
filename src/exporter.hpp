@@ -1,8 +1,6 @@
 #ifndef TEXO_INCLUDED_EXPORTER
 #define TEXO_INCLUDED_EXPORTER
 
-#include <scrvar.hpp>
-
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Texo Exporter
@@ -11,7 +9,7 @@
 class TexoExporter {
 public:
     virtual bool Put(char c) = 0;
-    virtual bool Put(const ScriptVariable & str);
+    virtual bool Put(const char *str);
 };
 
 

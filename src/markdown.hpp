@@ -8,7 +8,7 @@
 
 class TexoProducerMarkdown: public TexoProducer {
 public:
-    TexoProducerMarkdown(TexoExporter & exporter);
+    TexoProducerMarkdown(TexoExporter &exporter);
 
     bool End();
 
@@ -25,16 +25,14 @@ public:
     bool Strike();
     bool Underline();
 
-    bool Link(const ScriptVariable & link, const ScriptVariable & title);
+    bool Link(const char *link, const char *title);
     bool Link();
 
-    bool PutImage(const ScriptVariable & src,
-                  const ScriptVariable & alt,
-                  const ScriptVariable & title);
+    bool PutImage(const char *src, const char *alt, const char *title);
     bool PutHorizontalRule();
 
 private:
-    bool Mod(const ScriptVariable & str);
+    bool Mod(const char *str);
     bool Close();
     bool CloseLink();
 
@@ -44,14 +42,14 @@ private:
     bool code;
     bool nospace;
 
-    ScriptVariable link_link;
-    ScriptVariable link_title;
+    const char *link_link;
+    const char *link_title;
 };
 
 
 class TexoImporterMarkdown: public TexoImporter {
 public:
-    TexoImporterMarkdown(TexoProducer & producer);
+    TexoImporterMarkdown(TexoProducer &producer);
 
 
 protected:
@@ -80,32 +78,31 @@ private:
         header,
         header_pre,
         code
-    } state,
-        back;
+    } state, back;
     int header_level;
     int rule_dash_count;
     int code_quote_count;
 
-    void Start(char c);
-    void Text(char c);
-    void HeaderText(char c);
-    void QuotePre(char c);
-    void QuoteText(char c);
-    void QuoteNewline(char c);
-    void CodeText(char c);
-    void CodeNewline(char c);
-    void CodeEnd(char c);
-    void Backslash(char c);
-    void Asterisk(char c);
-    void Underline(char c);
-    void Plus(char c);
-    void Tilde(char c);
-    void Newline(char c);
-    void Rule(char c);
-    void Paragraph(char c);
-    void Header(char c);
-    void HeaderPre(char c);
-    void Code(char c);
+    bool Start(char c);
+    bool Text(char c);
+    bool HeaderText(char c);
+    bool QuotePre(char c);
+    bool QuoteText(char c);
+    bool QuoteNewline(char c);
+    bool CodeText(char c);
+    bool CodeNewline(char c);
+    bool CodeEnd(char c);
+    bool Backslash(char c);
+    bool Asterisk(char c);
+    bool Underline(char c);
+    bool Plus(char c);
+    bool Tilde(char c);
+    bool Newline(char c);
+    bool Rule(char c);
+    bool Paragraph(char c);
+    bool Header(char c);
+    bool HeaderPre(char c);
+    bool Code(char c);
 
     void Backquote();
 };
